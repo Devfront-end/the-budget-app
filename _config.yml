@@ -1,0 +1,7 @@
+# Exclude directories/files from being processed by Jekyll
+exclude:
+  - node_modules
+  - vendor
+  - README.md
+  - Gemfile
+  - Gemfile.lock
