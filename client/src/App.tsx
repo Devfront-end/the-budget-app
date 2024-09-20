@@ -12,7 +12,7 @@ const BudgetApp = () => {
     { description: 'Loisirs', amount: 150, date: '2024-03-20' },
     { description: 'Études', amount: 100, date: '2024-03-25' },
   ]);
-  const [newIncome, setNewIncome] = useState({ description: '', amount: '' });
+  const [newIncome, setNewIncome] = useState({ description: 'Salaire net', amount: '' });
   const [newExpense, setNewExpense] = useState({ description: '', amount: '', date: '' });
 
   const totalIncome = income.reduce((sum, item) => sum + item.amount, 0);
@@ -22,7 +22,7 @@ const BudgetApp = () => {
   const handleAddIncome = () => {
     if (newIncome.description && newIncome.amount) {
       setIncome([...income, { ...newIncome, amount: Number(newIncome.amount) }]);
-      setNewIncome({ description: '', amount: '' });
+      setNewIncome({ description: 'Salaire net', amount: '' });
     }
   };
 
@@ -36,7 +36,7 @@ const BudgetApp = () => {
   const handleDeleteIncome = (index: number) => {
     setIncome(income.filter((_, i) => i !== index));
   };
-  
+
   const handleDeleteExpense = (index: number) => {
     setExpenses(expenses.filter((_, i) => i !== index));
   };
@@ -57,24 +57,30 @@ const BudgetApp = () => {
 
       <main className="container mx-auto p-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-          <div className="bg-white p-4 rounded shadow">
+          <div className="bg-white p-4 rounded-lg shadow">
             <h2 className="text-xl font-semibold mb-4">Entrées d'argent</h2>
-            <select className="w-full p-2 mb-2 border rounded">
-              <option>Salaire net</option>
-            </select>
-            <input
-              type="number"
-              placeholder="Montant"
-              className="w-full p-2 mb-2 border rounded"
-              value={newIncome.amount}
-              onChange={(e) => setNewIncome({ ...newIncome, amount: e.target.value })}
-            />
-            <button
-              className="w-full bg-indigo-600 text-white p-2 rounded"
-              onClick={handleAddIncome}
-            >
-              + Ajouter une entrée
-            </button>
+            <div className="flex mb-2">
+              <select 
+                className="flex-grow mr-2 p-2 border rounded"
+                value={newIncome.description}
+                onChange={(e) => setNewIncome({ ...newIncome, description: e.target.value })}
+              >
+                <option>Salaire net</option>
+              </select>
+              <input
+                type="text"
+                placeholder="Montant"
+                className="flex-grow mr-2 p-2 border rounded"
+                value={newIncome.amount}
+                onChange={(e) => setNewIncome({ ...newIncome, amount: e.target.value })}
+              />
+              <button
+                className="bg-indigo-600 text-white px-4 py-2 rounded"
+                onClick={handleAddIncome}
+              >
+                + Ajouter une entrée
+              </button>
+            </div>
             {income.map((item, index) => (
               <div key={index} className="flex justify-between items-center mt-2">
                 <span>{item.description}: {item.amount} €</span>
@@ -89,56 +95,58 @@ const BudgetApp = () => {
             </div>
           </div>
 
-          <div className="bg-white p-4 rounded shadow">
+          <div className="bg-white p-4 rounded-lg shadow">
             <h2 className="text-xl font-semibold mb-4">Ajouter une dépense</h2>
-            <select
-              className="w-full p-2 mb-2 border rounded"
-              value={newExpense.description}
-              onChange={(e) => setNewExpense({ ...newExpense, description: e.target.value })}
-            >
-              <option value="">Sélectionner une catégorie</option>
-              <option value="Loyer ou crédit immobilier">Loyer ou crédit immobilier</option>
-              <option value="Supermarché">Supermarché</option>
-              <option value="Transport">Transport</option>
-              <option value="Charges">Charges</option>
-              <option value="Loisirs">Loisirs</option>
-              <option value="Études">Études</option>
-            </select>
-            <input
-              type="number"
-              placeholder="Montant"
-              className="w-full p-2 mb-2 border rounded"
-              value={newExpense.amount}
-              onChange={(e) => setNewExpense({ ...newExpense, amount: e.target.value })}
-            />
-            <input
-              type="date"
-              className="w-full p-2 mb-2 border rounded"
-              value={newExpense.date}
-              onChange={(e) => setNewExpense({ ...newExpense, date: e.target.value })}
-            />
-            <button
-              className="w-full bg-indigo-600 text-white p-2 rounded"
-              onClick={handleAddExpense}
-            >
-              + Ajouter la dépense
-            </button>
+            <div className="flex mb-2">
+              <select
+                className="flex-grow mr-2 p-2 border rounded"
+                value={newExpense.description}
+                onChange={(e) => setNewExpense({ ...newExpense, description: e.target.value })}
+              >
+                <option value="">Sélectionner une catégorie</option>
+                <option value="Loyer ou crédit immobilier">Loyer ou crédit immobilier</option>
+                <option value="Supermarché">Supermarché</option>
+                <option value="Transport">Transport</option>
+                <option value="Charges">Charges</option>
+                <option value="Loisirs">Loisirs</option>
+                <option value="Études">Études</option>
+              </select>
+              <input
+                type="text"
+                placeholder="Montant"
+                className="flex-grow mr-2 p-2 border rounded"
+                value={newExpense.amount}
+                onChange={(e) => setNewExpense({ ...newExpense, amount: e.target.value })}
+              />
+              <input
+                type="date"
+                className="flex-grow mr-2 p-2 border rounded"
+                value={newExpense.date}
+                onChange={(e) => setNewExpense({ ...newExpense, date: e.target.value })}
+              />
+              <button
+                className="bg-indigo-600 text-white px-4 py-2 rounded"
+                onClick={handleAddExpense}
+              >
+                + Ajouter la dépense
+              </button>
+            </div>
           </div>
         </div>
 
-        <div className="bg-green-100 p-4 rounded shadow mb-4">
+        <div className="bg-green-100 p-4 rounded-lg shadow mb-4">
           <h2 className="text-xl font-semibold">Argent restant: {remainingMoney.toFixed(2)} €</h2>
         </div>
 
-        <div className="bg-white p-4 rounded shadow mb-4">
+        <div className="bg-white p-4 rounded-lg shadow mb-4">
           <h2 className="text-xl font-semibold mb-4">Sorties d'argent</h2>
           <div className="relative mb-4">
+            <Search className="absolute left-3 top-3 text-gray-400" />
             <input
               type="text"
               placeholder="Rechercher des dépenses..."
               className="w-full p-2 pl-10 border rounded"
             />
-            <Search className="absolute left-3 top-2 text-gray-400" />
           </div>
           {expenses.map((expense, index) => (
             <div key={index} className="flex justify-between items-center mb-2">
@@ -157,7 +165,7 @@ const BudgetApp = () => {
           ))}
         </div>
 
-        <div className="bg-white p-4 rounded shadow">
+        <div className="bg-white p-4 rounded-lg shadow">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-semibold">Répartition des dépenses</h2>
             <Download className="text-green-500 cursor-pointer" />
