@@ -102,7 +102,11 @@ const BudgetApp: React.FC = () => {
             <YAxis />
             <Tooltip />
             <Legend />
-            <Bar dataKey="value" fill="#8884d8" />
+            <Bar dataKey="value" fill="#8884d8">
+              {chartData.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+              ))}
+            </Bar>
           </BarChart>
         );
       case 'line':
@@ -113,7 +117,11 @@ const BudgetApp: React.FC = () => {
             <YAxis />
             <Tooltip />
             <Legend />
-            <Line type="monotone" dataKey="value" stroke="#8884d8" />
+            <Line type="monotone" dataKey="value" stroke="#8884d8">
+              {chartData.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+              ))}
+            </Line>
           </LineChart>
         );
       default:
@@ -121,31 +129,9 @@ const BudgetApp: React.FC = () => {
     }
   };
 
-  const themeClasses = isDarkTheme
-    ? {
-        body: "bg-gray-900 text-white",
-        header: "bg-indigo-800",
-        card: "bg-gray-800",
-        input: "bg-gray-700 text-white border-gray-600",
-        button: "bg-indigo-600 hover:bg-indigo-700",
-        incomeText: "text-green-400",
-        expenseText: "text-red-400",
-        balanceCard: "bg-gray-700",
-      }
-    : {
-        body: "bg-gray-100 text-gray-900",
-        header: "bg-indigo-600",
-        card: "bg-white",
-        input: "bg-white text-gray-900 border-gray-300",
-        button: "bg-indigo-600 hover:bg-indigo-700",
-        incomeText: "text-green-600",
-        expenseText: "text-red-600",
-        balanceCard: "bg-green-100",
-      };
-
   return (
-    <div className={`${themeClasses.body} min-h-screen`}>
-      <header className={`${themeClasses.header} text-white p-4 flex justify-between items-center`}>
+    <div className={`min-h-screen ${isDarkTheme ? 'bg-gray-900 text-white' : 'bg-gray-100 text-black'}`}>
+      <header className="bg-indigo-600 text-white p-4 flex justify-between items-center">
         <h1 className="text-2xl font-bold">Budget App</h1>
         {isDarkTheme ? (
           <Sun className="cursor-pointer" onClick={toggleTheme} />
@@ -155,32 +141,12 @@ const BudgetApp: React.FC = () => {
       </header>
 
       <main className="container mx-auto p-4">
-        <div className={`${themeClasses.balanceCard} p-4 rounded-lg shadow mb-4`}>
-          <h2 className="text-xl font-semibold">Budget Summary</h2>
-          <div className="grid grid-cols-3 gap-4 mt-2">
-            <div>
-              <div className="text-sm opacity-75">Total Income</div>
-              <div className={`text-lg font-bold ${themeClasses.incomeText}`}>{totalIncome.toFixed(2)} €</div>
-            </div>
-            <div>
-              <div className="text-sm opacity-75">Total Expenses</div>
-              <div className={`text-lg font-bold ${themeClasses.expenseText}`}>{totalExpenses.toFixed(2)} €</div>
-            </div>
-            <div>
-              <div className="text-sm opacity-75">Balance</div>
-              <div className={`text-lg font-bold ${remainingMoney >= 0 ? themeClasses.incomeText : themeClasses.expenseText}`}>
-                {remainingMoney.toFixed(2)} €
-              </div>
-            </div>
-          </div>
-        </div>
-
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-          <div className={`${themeClasses.card} p-4 rounded-lg shadow`}>
+          <div className={`p-4 rounded-lg shadow ${isDarkTheme ? 'bg-gray-800' : 'bg-white'}`}>
             <h2 className="text-xl font-semibold mb-4">Entrées d'argent</h2>
             <div className="flex flex-wrap mb-2">
               <select 
-                className={`${themeClasses.input} flex-grow mr-2 p-2 rounded mb-2 sm:mb-0`}
+                className={`flex-grow mr-2 p-2 border rounded mb-2 sm:mb-0 ${isDarkTheme ? 'border-gray-700' : 'border-gray-300'}`}
                 value={newIncome.description}
                 onChange={(e) => setNewIncome({ ...newIncome, description: e.target.value })}
               >
@@ -192,12 +158,12 @@ const BudgetApp: React.FC = () => {
               <input
                 type="text"
                 placeholder="Montant"
-                className={`${themeClasses.input} w-full sm:w-24 mr-2 p-2 rounded mb-2 sm:mb-0`}
+                className={`w-full sm:w-24 mr-2 p-2 border rounded mb-2 sm:mb-0 ${isDarkTheme ? 'border-gray-700' : 'border-gray-300'}`}
                 value={newIncome.amount}
                 onChange={(e) => setNewIncome({ ...newIncome, amount: e.target.value })}
               />
               <button
-                className={`${themeClasses.button} w-full sm:w-auto text-white px-4 py-2 rounded`}
+                className="w-full sm:w-auto bg-indigo-600 text-white px-4 py-2 rounded"
                 onClick={handleAddIncome}
               >
                 + Ajouter
@@ -207,7 +173,7 @@ const BudgetApp: React.FC = () => {
               <input
                 type="text"
                 placeholder="Nouvelle catégorie"
-                className={`${themeClasses.input} flex-grow mr-2 p-2 rounded`}
+                className={`flex-grow mr-2 p-2 border rounded ${isDarkTheme ? 'border-gray-700' : 'border-gray-300'}`}
                 value={newCategory}
                 onChange={(e) => setNewCategory(e.target.value)}
               />
@@ -220,7 +186,7 @@ const BudgetApp: React.FC = () => {
             </div>
             {income.map((item, index) => (
               <div key={index} className="flex justify-between items-center mt-2">
-                <span>{item.description}: <span className={themeClasses.incomeText}>{item.amount} €</span></span>
+                <span>{item.description}: {item.amount} €</span>
                 <Trash2
                   className="text-red-500 cursor-pointer"
                   onClick={() => handleDeleteIncome(index)}
@@ -228,15 +194,15 @@ const BudgetApp: React.FC = () => {
               </div>
             ))}
             <div className="mt-4 font-semibold">
-              Total des entrées: <span className={themeClasses.incomeText}>{totalIncome.toFixed(2)} €</span>
+              Total des entrées: {totalIncome.toFixed(2)} €
             </div>
           </div>
 
-          <div className={`${themeClasses.card} p-4 rounded-lg shadow`}>
+          <div className={`p-4 rounded-lg shadow ${isDarkTheme ? 'bg-gray-800' : 'bg-white'}`}>
             <h2 className="text-xl font-semibold mb-4">Ajouter une dépense</h2>
             <div className="flex flex-wrap mb-2">
               <select
-                className={`${themeClasses.input} flex-grow mr-2 p-2 rounded mb-2 sm:mb-0`}
+                className={`flex-grow mr-2 p-2 border rounded mb-2 sm:mb-0 ${isDarkTheme ? 'border-gray-700' : 'border-gray-300'}`}
                 value={newExpense.description}
                 onChange={(e) => setNewExpense({ ...newExpense, description: e.target.value })}
               >
@@ -248,18 +214,18 @@ const BudgetApp: React.FC = () => {
               <input
                 type="text"
                 placeholder="Montant"
-                className={`${themeClasses.input} w-full sm:w-24 mr-2 p-2 rounded mb-2 sm:mb-0`}
+                className={`w-full sm:w-24 mr-2 p-2 border rounded mb-2 sm:mb-0 ${isDarkTheme ? 'border-gray-700' : 'border-gray-300'}`}
                 value={newExpense.amount}
                 onChange={(e) => setNewExpense({ ...newExpense, amount: e.target.value })}
               />
               <input
                 type="date"
-                className={`${themeClasses.input} w-full sm:w-32 mr-2 p-2 rounded mb-2 sm:mb-0`}
+                className={`w-full sm:w-32 mr-2 p-2 border rounded mb-2 sm:mb-0 ${isDarkTheme ? 'border-gray-700' : 'border-gray-300'}`}
                 value={newExpense.date}
                 onChange={(e) => setNewExpense({ ...newExpense, date: e.target.value })}
               />
               <button
-                className={`${themeClasses.button} w-full sm:w-auto text-white px-4 py-2 rounded`}
+                className="w-full sm:w-auto bg-indigo-600 text-white px-4 py-2 rounded"
                 onClick={handleAddExpense}
               >
                 + Ajouter
@@ -269,7 +235,7 @@ const BudgetApp: React.FC = () => {
               <input
                 type="text"
                 placeholder="Nouvelle catégorie"
-                className={`${themeClasses.input} flex-grow mr-2 p-2 rounded`}
+                className={`flex-grow mr-2 p-2 border rounded ${isDarkTheme ? 'border-gray-700' : 'border-gray-300'}`}
                 value={newCategory}
                 onChange={(e) => setNewCategory(e.target.value)}
               />
@@ -283,40 +249,35 @@ const BudgetApp: React.FC = () => {
           </div>
         </div>
 
-        <div className={`${themeClasses.card} p-4 rounded-lg shadow mb-4`}>
-          <h2 className="text-xl font-semibold mb-4">Sorties d'argent</h2>
-          <div className="relative mb-4">
-            <Search className="absolute left-3 top-3 text-gray-400" />
-            <input
-              type="text"
-              placeholder="Rechercher des dépenses..."
-              className={`${themeClasses.input} w-full p-2 pl-10 border rounded`}
-            />
-          </div>
-          {expenses.map((expense, index) => (
-            <div key={index} className="flex justify-between items-center py-2 border-b border-gray-200 dark:border-gray-700">
-              <div>
-                <div className="font-semibold">{expense.description}</div>
-                <div className="text-sm opacity-75">{expense.date}</div>
-              </div>
-              <div className="flex items-center">
-                <span className={`mr-2 ${themeClasses.expenseText}`}>{expense.amount} €</span>
-                <Trash2
-                  className="text-red-500 cursor-pointer"
-                  onClick={() => handleDeleteExpense(index)}
-                />
-              </div>
-            </div>
-          ))}
+        <div className={`p-4 rounded-lg shadow mb-4 ${isDarkTheme ? 'bg-gray-800' : 'bg-green-100'}`}>
+          <h2 className="text-xl font-semibold">Argent restant: {remainingMoney.toFixed(2)} €</h2>
         </div>
 
-        <div className={`${themeClasses.card} p-4 rounded-lg shadow`}>
+        <div className={`p-4 rounded-lg shadow mb-4 ${isDarkTheme ? 'bg-gray-800' : 'bg-white'}`}>
+          <h2 className="text-xl font-semibold mb-4">Budget Summary</h2>
+          <div className="grid grid-cols-3 gap-4">
+            <div>
+              <div className="text-sm opacity-75">Total Income</div>
+              <div className="text-lg font-bold">{totalIncome.toFixed(2)} €</div>
+            </div>
+            <div>
+              <div className="text-sm opacity-75">Total Expenses</div>
+              <div className="text-lg font-bold">{totalExpenses.toFixed(2)} €</div>
+            </div>
+            <div>
+              <div className="text-sm opacity-75">Balance</div>
+              <div className="text-lg font-bold">{remainingMoney.toFixed(2)} €</div>
+            </div>
+          </div>
+        </div>
+
+        <div className={`p-4 rounded-lg shadow ${isDarkTheme ? 'bg-gray-800' : 'bg-white'}`}>
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-semibold">Répartition des dépenses</h2>
             <Download className="text-green-500 cursor-pointer" />
           </div>
           <select 
-            className={`${themeClasses.input} w-full p-2 mb-4 border rounded`}
+            className={`w-full p-2 mb-4 border rounded ${isDarkTheme ? 'border-gray-700' : 'border-gray-300'}`}
             value={chartType}
             onChange={(e) => setChartType(e.target.value)}
           >
