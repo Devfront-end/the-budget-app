@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import { Trash2, Search, Download, Moon } from 'lucide-react';
 import { PieChart, Pie, Cell, Legend, Tooltip } from 'recharts';
 
-const BudgetApp = () => {
+const BudgetApp: React.FC = () => {
+  const [incomeCategories, setIncomeCategories] = useState(['Salaire net', 'Freelance', 'Investissements']);
+  const [expenseCategories, setExpenseCategories] = useState(['Loyer', 'Courses', 'Transport', 'Loisirs', 'Santé']);
   const [income, setIncome] = useState([{ description: 'Salaire', amount: 4000 }]);
   const [expenses, setExpenses] = useState([
     { description: 'Logement', amount: 1500, date: '2024-03-01' },
@@ -12,8 +14,9 @@ const BudgetApp = () => {
     { description: 'Loisirs', amount: 150, date: '2024-03-20' },
     { description: 'Études', amount: 100, date: '2024-03-25' },
   ]);
-  const [newIncome, setNewIncome] = useState({ description: 'Salaire net', amount: '' });
+  const [newIncome, setNewIncome] = useState({ description: '', amount: '' });
   const [newExpense, setNewExpense] = useState({ description: '', amount: '', date: '' });
+  const [newCategory, setNewCategory] = useState('');
 
   const totalIncome = income.reduce((sum, item) => sum + item.amount, 0);
   const totalExpenses = expenses.reduce((sum, item) => sum + item.amount, 0);
@@ -22,7 +25,7 @@ const BudgetApp = () => {
   const handleAddIncome = () => {
     if (newIncome.description && newIncome.amount) {
       setIncome([...income, { ...newIncome, amount: Number(newIncome.amount) }]);
-      setNewIncome({ description: 'Salaire net', amount: '' });
+      setNewIncome({ description: '', amount: '' });
     }
   };
 
@@ -39,6 +42,17 @@ const BudgetApp = () => {
 
   const handleDeleteExpense = (index: number) => {
     setExpenses(expenses.filter((_, i) => i !== index));
+  };
+
+  const handleAddCategory = (type: 'income' | 'expense') => {
+    if (newCategory) {
+      if (type === 'income') {
+        setIncomeCategories([...incomeCategories, newCategory]);
+      } else {
+        setExpenseCategories([...expenseCategories, newCategory]);
+      }
+      setNewCategory('');
+    }
   };
 
   const pieChartData = expenses.map(expense => ({
@@ -65,12 +79,15 @@ const BudgetApp = () => {
                 value={newIncome.description}
                 onChange={(e) => setNewIncome({ ...newIncome, description: e.target.value })}
               >
-                <option>Salaire net</option>
+                <option value="">Sélectionner une catégorie</option>
+                {incomeCategories.map((cat, index) => (
+                  <option key={index} value={cat}>{cat}</option>
+                ))}
               </select>
               <input
                 type="text"
                 placeholder="Montant"
-                className="flex-grow mr-2 p-2 border rounded"
+                className="w-24 mr-2 p-2 border rounded"
                 value={newIncome.amount}
                 onChange={(e) => setNewIncome({ ...newIncome, amount: e.target.value })}
               />
@@ -78,7 +95,22 @@ const BudgetApp = () => {
                 className="bg-indigo-600 text-white px-4 py-2 rounded"
                 onClick={handleAddIncome}
               >
-                + Ajouter une entrée
+                + Ajouter
+              </button>
+            </div>
+            <div className="flex mb-2">
+              <input
+                type="text"
+                placeholder="Nouvelle catégorie"
+                className="flex-grow mr-2 p-2 border rounded"
+                value={newCategory}
+                onChange={(e) => setNewCategory(e.target.value)}
+              />
+              <button
+                className="bg-green-500 text-white px-4 py-2 rounded"
+                onClick={() => handleAddCategory('income')}
+              >
+                + Catégorie
               </button>
             </div>
             {income.map((item, index) => (
@@ -104,23 +136,20 @@ const BudgetApp = () => {
                 onChange={(e) => setNewExpense({ ...newExpense, description: e.target.value })}
               >
                 <option value="">Sélectionner une catégorie</option>
-                <option value="Loyer ou crédit immobilier">Loyer ou crédit immobilier</option>
-                <option value="Supermarché">Supermarché</option>
-                <option value="Transport">Transport</option>
-                <option value="Charges">Charges</option>
-                <option value="Loisirs">Loisirs</option>
-                <option value="Études">Études</option>
+                {expenseCategories.map((cat, index) => (
+                  <option key={index} value={cat}>{cat}</option>
+                ))}
               </select>
               <input
                 type="text"
                 placeholder="Montant"
-                className="flex-grow mr-2 p-2 border rounded"
+                className="w-24 mr-2 p-2 border rounded"
                 value={newExpense.amount}
                 onChange={(e) => setNewExpense({ ...newExpense, amount: e.target.value })}
               />
               <input
                 type="date"
-                className="flex-grow mr-2 p-2 border rounded"
+                className="w-32 mr-2 p-2 border rounded"
                 value={newExpense.date}
                 onChange={(e) => setNewExpense({ ...newExpense, date: e.target.value })}
               />
@@ -128,7 +157,22 @@ const BudgetApp = () => {
                 className="bg-indigo-600 text-white px-4 py-2 rounded"
                 onClick={handleAddExpense}
               >
-                + Ajouter la dépense
+                + Ajouter
+              </button>
+            </div>
+            <div className="flex mb-2">
+              <input
+                type="text"
+                placeholder="Nouvelle catégorie"
+                className="flex-grow mr-2 p-2 border rounded"
+                value={newCategory}
+                onChange={(e) => setNewCategory(e.target.value)}
+              />
+              <button
+                className="bg-green-500 text-white px-4 py-2 rounded"
+                onClick={() => handleAddCategory('expense')}
+              >
+                + Catégorie
               </button>
             </div>
           </div>
