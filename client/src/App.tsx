@@ -2,21 +2,25 @@ import React, { useState } from 'react';
 import { Trash2, Search, Download, Moon } from 'lucide-react';
 import { PieChart, Pie, Cell, Legend, Tooltip } from 'recharts';
 
+interface IncomeItem {
+  description: string;
+  amount: number;
+}
+
+interface ExpenseItem {
+  description: string;
+  amount: number;
+  date: string;
+}
+
 const BudgetApp: React.FC = () => {
-  const [incomeCategories, setIncomeCategories] = useState(['Salaire net', 'Freelance', 'Investissements']);
-  const [expenseCategories, setExpenseCategories] = useState(['Loyer', 'Courses', 'Transport', 'Loisirs', 'Santé']);
-  const [income, setIncome] = useState([{ description: 'Salaire', amount: 4000 }]);
-  const [expenses, setExpenses] = useState([
-    { description: 'Logement', amount: 1500, date: '2024-03-01' },
-    { description: 'Supermarché', amount: 500, date: '2024-03-05' },
-    { description: 'Transport', amount: 300, date: '2024-03-10' },
-    { description: 'Charges', amount: 200, date: '2024-03-15' },
-    { description: 'Loisirs', amount: 150, date: '2024-03-20' },
-    { description: 'Études', amount: 100, date: '2024-03-25' },
-  ]);
-  const [newIncome, setNewIncome] = useState({ description: '', amount: '' });
-  const [newExpense, setNewExpense] = useState({ description: '', amount: '', date: '' });
-  const [newCategory, setNewCategory] = useState('');
+  const [incomeCategories, setIncomeCategories] = useState<string[]>(['Salaire net', 'Freelance', 'Investissements']);
+  const [expenseCategories, setExpenseCategories] = useState<string[]>(['Loyer', 'Courses', 'Transport', 'Loisirs', 'Santé']);
+  const [income, setIncome] = useState<IncomeItem[]>([]);
+  const [expenses, setExpenses] = useState<ExpenseItem[]>([]);
+  const [newIncome, setNewIncome] = useState<{ description: string; amount: string }>({ description: '', amount: '' });
+  const [newExpense, setNewExpense] = useState<{ description: string; amount: string; date: string }>({ description: '', amount: '', date: '' });
+  const [newCategory, setNewCategory] = useState<string>('');
 
   const totalIncome = income.reduce((sum, item) => sum + item.amount, 0);
   const totalExpenses = expenses.reduce((sum, item) => sum + item.amount, 0);

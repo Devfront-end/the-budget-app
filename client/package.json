@@ -2,6 +2,7 @@
     "name": "budget-app-client",
     "version": "0.1.0",
     "private": true,
+    "homepage": "https://devfront-end.github.io/the-budget-app/",
     "dependencies": {
         "@types/node": "^16.18.0",
         "axios": "^0.27.2",
