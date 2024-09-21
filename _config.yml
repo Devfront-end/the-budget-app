@@ -5,5 +5,13 @@ exclude:
   - README.md
   - Gemfile
   - Gemfile.lock
-  
-include: ["client/build"]
+
+include:
+  - client/build
+
+steps:
+  - uses: actions/checkout@v4
+  - uses: actions/setup-node@v3
+    with:
+      node-version: '20'
+  - uses: JamesIves/github-pages-deploy-action@v4
