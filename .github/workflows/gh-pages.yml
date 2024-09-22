@@ -25,4 +25,12 @@ jobs:
         run: |
           cd client
           npm ci
-          npm run build
+
+      - name: Install Jekyll and Dependencies
+        run: |
+          gem install bundler
+          bundle install
+
+      - name: Debug Jekyll Build
+        run: |
+          bundle exec jekyll build --trace
