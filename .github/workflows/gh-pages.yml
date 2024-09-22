@@ -48,3 +48,9 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./client/build
+
+      # Step 7: Debug Jekyll Build
+      - name: Debug Jekyll Build
+        run: |
+          cd client
+          bundle exec jekyll build --trace
