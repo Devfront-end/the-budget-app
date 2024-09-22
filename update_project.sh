@@ -1,10 +1,14 @@
+#!/bin/bash
+
+# Define the project directories
+SRC_DIR="client/src"
+
+# Update the App.tsx file
+cat <<EOF > $SRC_DIR/App.tsx
 import React, { useState } from 'react';
 import { Route, Routes, Link } from 'react-router-dom';
-import { Sun, Moon, Trash, Download } from 'lucide-react';
-import { CSVLink } from 'react-csv';
+import { Sun, Moon } from 'lucide-react';
 import ExpensesChartPage from './components/ExpensesChartPage';
-import BudgetSummary from './components/BudgetSummary';
-import WishlistPage from './components/WishlistPage';
 
 interface IncomeItem {
   description: string;
@@ -31,6 +35,7 @@ const App: React.FC = () => {
 
   const totalIncome = income.reduce((sum, item) => sum + item.amount, 0);
   const totalExpenses = expenses.reduce((sum, item) => sum + item.amount, 0);
+  const remainingMoney = totalIncome - totalExpenses;
 
   const handleAddIncome = () => {
     if (newIncome.description && newIncome.amount) {
@@ -57,20 +62,13 @@ const App: React.FC = () => {
     }
   };
 
-  const csvHeaders = [
-    { label: 'Description', key: 'description' },
-    { label: 'Amount', key: 'amount' },
-    { label: 'Date', key: 'date' }
-  ];
-
   return (
-    <div className={`min-h-screen ${isDarkTheme ? 'bg-gray-900 text-white' : 'bg-gray-100 text-black'}`}>
+    <div className={\`min-h-screen \${isDarkTheme ? 'bg-gray-900 text-white' : 'bg-gray-100 text-black'}\`}>
       <header className="bg-indigo-600 text-white p-4 flex justify-between items-center">
         <h1 className="text-2xl font-bold">Budget App</h1>
         <nav>
           <Link to="/" className="mr-4">Home</Link>
           <Link to="/expenses-chart">Répartition des dépenses</Link>
-          <Link to="/wishlist" className="ml-4">Wishlist</Link>
         </nav>
         {isDarkTheme ? (
           <Sun className="cursor-pointer" onClick={toggleTheme} />
@@ -115,6 +113,7 @@ const App: React.FC = () => {
                   />
                   <button onClick={() => handleAddCategory('income')} className="bg-green-500 text-white px-4 py-2 rounded">+ Catégorie</button>
                 </div>
+                <p className="mt-4">Total des entrées: {totalIncome.toFixed(2)} €</p>
               </div>
 
               <div className="bg-white p-4 rounded-lg shadow">
@@ -158,62 +157,54 @@ const App: React.FC = () => {
               </div>
             </div>
 
-            {/* Budget Summary */}
-            <div className="container mx-auto mt-8">
-              <BudgetSummary totalIncome={totalIncome} totalExpenses={totalExpenses} />
+            <div className="mt-8 bg-green-100 p-4 rounded-lg">
+              <h2 className="text-xl font-semibold mb-2">Argent restant: {remainingMoney.toFixed(2)} €</h2>
             </div>
 
             <div className="mt-8">
               <h2 className="text-xl font-semibold mb-4">Sorties d'argent</h2>
-              <div className="flex justify-between items-center mb-4">
-                <input
-                  type="text"
-                  placeholder="Rechercher des dépenses..."
-                  className="w-full p-2 border rounded"
-                  // You can add functionality to filter expenses here
-                />
-                <CSVLink
-                  data={expenses}
-                  headers={csvHeaders}
-                  filename="expenses.csv"
-                  className="ml-4 text-blue-500 hover:text-blue-700"
-                >
-                  <Download className="w-6 h-6" />
-                </CSVLink>
-              </div>
-              <ul>
-                {expenses.map((expense, index) => (
-                  <li
-                    key={index}
-                    className="flex justify-between items-center border-b py-2"
-                  >
-                    <div>
-                      <span className="font-semibold">{expense.description}</span>
-                      <span className="text-gray-500 ml-2">{expense.date}</span>
-                    </div>
-                    <div className="flex items-center">
-                      <span className="text-red-500">{expense.amount} €</span>
-                      <button
-                        onClick={() => {
-                          const updatedExpenses = expenses.filter((_, i) => i !== index);
-                          setExpenses(updatedExpenses);
-                        }}
-                        className="ml-4 text-red-500 hover:text-red-700"
-                      >
-                        <Trash className="w-6 h-6" />
-                      </button>
-                    </div>
-                  </li>
-                ))}
-              </ul>
+              <input
+                type="text"
+                placeholder="Rechercher des dépenses..."
+                className="w-full p-2 border rounded mb-4"
+              />
+              {/* Here you can add a list of expenses */}
             </div>
           </main>
         } />
         <Route path="/expenses-chart" element={<ExpensesChartPage expenses={expenses} isDarkTheme={isDarkTheme} />} />
-        <Route path="/wishlist" element={<WishlistPage />} />
       </Routes>
     </div>
   );
 };
 
 export default App;
+EOF
+
+# Update the index.tsx file
+cat <<EOF > $SRC_DIR/index.tsx
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { BrowserRouter } from 'react-router-dom';
+import './index.css';
+import App from './App';
+
+const root = ReactDOM.createRoot(
+  document.getElementById('root') as HTMLElement
+);
+root.render(
+  <React.StrictMode>
+    <BrowserRouter basename="/the-budget-app">
+      <App />
+    </BrowserRouter>
+  </React.StrictMode>
+);
+EOF
+
+# Check for TypeScript errors
+echo "Checking for TypeScript errors..."
+npx tsc --noEmit
+
+# Start the development server
+echo "Starting the development server..."
+npm start
