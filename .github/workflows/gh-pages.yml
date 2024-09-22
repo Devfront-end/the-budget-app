@@ -2,9 +2,10 @@ name: Build and Deploy
 
 on:
   push:
-    branches:
-      - main
-      - new-feature  # Add the branch you are working on
+    branches: [main]
+
+permissions:
+  contents: write
 
 jobs:
   build-and-deploy:
@@ -34,22 +35,9 @@ jobs:
       - name: Install and Build 🔧
         run: |
           cd client
-          npm ci  # Install dependencies
-          npm run build  # Build the project
+          npm ci
+          npm run build
 
-      # Step 5: Disable Jekyll on GitHub Pages by creating .nojekyll file
-      - name: Disable Jekyll on GitHub Pages
-        run: |
-          touch client/build/.nojekyll
-
-      # Step 6: Deploy to GitHub Pages
-      - name: Deploy to GitHub Pages 🚀
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./client/build
-
-      # Step 7: Debug Jekyll Build
       - name: Debug Jekyll Build
         run: |
           cd client
