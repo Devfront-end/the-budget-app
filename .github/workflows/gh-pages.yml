@@ -2,7 +2,9 @@ name: GitHub Pages deploy
 
 on:
   push:
-    branches: [main]
+    branches: 
+      - main
+      - new-feature
 
 permissions:
   contents: write
@@ -24,8 +26,3 @@ jobs:
           cd client
           npm ci
           npm run build
-
-      - name: Debug Jekyll Build
-        run: |
-          cd client
-          bundle exec jekyll build --trace
