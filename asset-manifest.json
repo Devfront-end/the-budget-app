@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/the-budget-app/static/css/main.d7226b4f.css",
-    "main.js": "/the-budget-app/static/js/main.c3e361ec.js",
+    "main.css": "/the-budget-app/static/css/main.2f4530b3.css",
+    "main.js": "/the-budget-app/static/js/main.9d2c2d80.js",
     "index.html": "/the-budget-app/index.html",
-    "main.d7226b4f.css.map": "/the-budget-app/static/css/main.d7226b4f.css.map",
-    "main.c3e361ec.js.map": "/the-budget-app/static/js/main.c3e361ec.js.map"
+    "main.2f4530b3.css.map": "/the-budget-app/static/css/main.2f4530b3.css.map",
+    "main.9d2c2d80.js.map": "/the-budget-app/static/js/main.9d2c2d80.js.map"
   },
   "entrypoints": [
-    "static/css/main.d7226b4f.css",
-    "static/js/main.c3e361ec.js"
+    "static/css/main.2f4530b3.css",
+    "static/js/main.9d2c2d80.js"
   ]
 }
