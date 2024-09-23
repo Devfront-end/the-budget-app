@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Trash } from 'lucide-react';
+import { Trash, Edit3, Save } from 'lucide-react';
 import { jsPDF } from 'jspdf';
 import html2canvas from 'html2canvas';
 
@@ -17,6 +17,8 @@ const WishlistPage: React.FC = () => {
   const [newPrice, setNewPrice] = useState<string>('');
   const [newPicture, setNewPicture] = useState<string>('');
   const [newLink, setNewLink] = useState<string>('');
+  const [editIndex, setEditIndex] = useState<number | null>(null);
+  const [editItem, setEditItem] = useState<WishlistItem | null>(null);
 
   const handleAddItem = () => {
     if (newItem && newPrice) {
@@ -38,6 +40,28 @@ const WishlistPage: React.FC = () => {
       i === index ? { ...item, purchased: !item.purchased } : item
     );
     setWishlist(updatedWishlist);
+  };
+
+  const handleEditItem = (index: number) => {
+    setEditIndex(index);
+    setEditItem(wishlist[index]);
+  };
+
+  const handleSaveEdit = () => {
+    if (editItem && editIndex !== null) {
+      const updatedWishlist = wishlist.map((item, i) =>
+        i === editIndex ? editItem : item
+      );
+      setWishlist(updatedWishlist);
+      setEditIndex(null);
+      setEditItem(null);
+    }
+  };
+
+  const handleEditChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (editItem) {
+      setEditItem({ ...editItem, [e.target.name]: e.target.value });
+    }
   };
 
   const calculateTotalPrice = () => {
@@ -118,28 +142,82 @@ const WishlistPage: React.FC = () => {
           <tbody>
             {wishlist.map((item, index) => (
               <tr key={index} className={`${item.purchased ? 'line-through text-gray-500' : ''}`}>
-                <td className="py-2 px-4 border-b border-gray-300">{item.description}</td>
-                <td className="py-2 px-4 border-b border-gray-300">${item.price.toFixed(2)}</td>
-                <td className="py-2 px-4 border-b border-gray-300">
-                  {item.picture && <img src={item.picture} alt={item.description} className="w-10 h-10" />}
-                </td>
-                <td className="py-2 px-4 border-b border-gray-300">
-                  {item.link && <a href={item.link} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">Lien</a>}
-                </td>
-                <td className="py-2 px-4 border-b border-gray-300">
-                  <input
-                    type="checkbox"
-                    checked={item.purchased}
-                    onChange={() => handleTogglePurchased(index)}
-                    className="mr-2"
-                  />
-                  <button
-                    onClick={() => handleRemoveItem(index)}
-                    className="text-red-500 hover:text-red-700"
-                  >
-                    <Trash className="w-6 h-6" />
-                  </button>
-                </td>
+                {editIndex === index ? (
+                  <>
+                    <td className="py-2 px-4 border-b border-gray-300">
+                      <input
+                        type="text"
+                        name="description"
+                        value={editItem?.description || ''}
+                        onChange={handleEditChange}
+                        className="p-2 border rounded w-full"
+                      />
+                    </td>
+                    <td className="py-2 px-4 border-b border-gray-300">
+                      <input
+                        type="number"
+                        name="price"
+                        value={editItem?.price || ''}
+                        onChange={handleEditChange}
+                        className="p-2 border rounded w-full"
+                      />
+                    </td>
+                    <td className="py-2 px-4 border-b border-gray-300">
+                      <input
+                        type="text"
+                        name="picture"
+                        value={editItem?.picture || ''}
+                        onChange={handleEditChange}
+                        className="p-2 border rounded w-full"
+                      />
+                    </td>
+                    <td className="py-2 px-4 border-b border-gray-300">
+                      <input
+                        type="text"
+                        name="link"
+                        value={editItem?.link || ''}
+                        onChange={handleEditChange}
+                        className="p-2 border rounded w-full"
+                      />
+                    </td>
+                    <td className="py-2 px-4 border-b border-gray-300">
+                      <button onClick={handleSaveEdit} className="text-green-500 hover:text-green-700">
+                        <Save className="w-6 h-6" />
+                      </button>
+                    </td>
+                  </>
+                ) : (
+                  <>
+                    <td className="py-2 px-4 border-b border-gray-300">{item.description}</td>
+                    <td className="py-2 px-4 border-b border-gray-300">${item.price.toFixed(2)}</td>
+                    <td className="py-2 px-4 border-b border-gray-300">
+                      {item.picture && <img src={item.picture} alt={item.description} className="w-10 h-10" />}
+                    </td>
+                    <td className="py-2 px-4 border-b border-gray-300">
+                      {item.link && <a href={item.link} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">Lien</a>}
+                    </td>
+                    <td className="py-2 px-4 border-b border-gray-300">
+                      <input
+                        type="checkbox"
+                        checked={item.purchased}
+                        onChange={() => handleTogglePurchased(index)}
+                        className="mr-2"
+                      />
+                      <button
+                        onClick={() => handleRemoveItem(index)}
+                        className="text-red-500 hover:text-red-700"
+                      >
+                        <Trash className="w-6 h-6" />
+                      </button>
+                      <button
+                        onClick={() => handleEditItem(index)}
+                        className="text-yellow-500 hover:text-yellow-700 ml-2"
+                      >
+                        <Edit3 className="w-6 h-6" />
+                      </button>
+                    </td>
+                  </>
+                )}
               </tr>
             ))}
           </tbody>
