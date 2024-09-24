@@ -6,3 +6,5 @@ client/node_modules/.cache/tsconfig.tsbuildinfo
 
 # Ignore node_modules directory
 node_modules/
+node_modules/
+.cache/
