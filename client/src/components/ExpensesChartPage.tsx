@@ -1,5 +1,5 @@
-import React from 'react';
-import { PieChart, Pie, Cell, Legend, Tooltip, ResponsiveContainer } from 'recharts';
+import React, { useState } from 'react';
+import { PieChart, Pie, Cell, Legend, Tooltip, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, LineChart, Line, AreaChart, Area, RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis } from 'recharts';
 
 interface ExpenseItem {
   description: string;
@@ -13,6 +13,8 @@ interface ExpensesChartPageProps {
 }
 
 const ExpensesChartPage: React.FC<ExpensesChartPageProps> = ({ expenses = [], isDarkTheme }) => {
+  const [chartType, setChartType] = useState<'pie' | 'doughnut' | 'bar' | 'line' | 'area' | 'radar'>('pie');
+
   const chartData = expenses.reduce((acc, expense) => {
     const existingCategory = acc.find(item => item.name === expense.description);
     if (existingCategory) {
@@ -24,6 +26,100 @@ const ExpensesChartPage: React.FC<ExpensesChartPageProps> = ({ expenses = [], is
   }, [] as { name: string; value: number }[]);
 
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', '#82ca9d'];
+
+  const renderChart = () => {
+    switch (chartType) {
+      case 'pie':
+        return (
+          <PieChart>
+            <Pie
+              data={chartData}
+              cx="50%"
+              cy="50%"
+              labelLine={false}
+              outerRadius={150}
+              fill="#8884d8"
+              dataKey="value"
+              label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+            >
+              {chartData.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+              ))}
+            </Pie>
+            <Tooltip />
+            <Legend />
+          </PieChart>
+        );
+      case 'doughnut':
+        return (
+          <PieChart>
+            <Pie
+              data={chartData}
+              cx="50%"
+              cy="50%"
+              innerRadius={60}
+              outerRadius={150}
+              fill="#8884d8"
+              dataKey="value"
+              label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+            >
+              {chartData.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+              ))}
+            </Pie>
+            <Tooltip />
+            <Legend />
+          </PieChart>
+        );
+      case 'bar':
+        return (
+          <BarChart data={chartData}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="name" />
+            <YAxis />
+            <Tooltip />
+            <Legend />
+            <Bar dataKey="value">
+              {chartData.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+              ))}
+            </Bar>
+          </BarChart>
+        );
+      case 'line':
+        return (
+          <LineChart data={chartData}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="name" />
+            <YAxis />
+            <Tooltip />
+            <Legend />
+            <Line type="monotone" dataKey="value" stroke="#8884d8" />
+          </LineChart>
+        );
+      case 'area':
+        return (
+          <AreaChart data={chartData}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="name" />
+            <YAxis />
+            <Tooltip />
+            <Legend />
+            <Area type="monotone" dataKey="value" stroke="#8884d8" fill="#8884d8" />
+          </AreaChart>
+        );
+      case 'radar':
+        return (
+          <RadarChart cx="50%" cy="50%" outerRadius="80%" data={chartData}>
+            <PolarGrid />
+            <PolarAngleAxis dataKey="name" />
+            <PolarRadiusAxis />
+            <Radar name="Expenses" dataKey="value" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6} />
+            <Legend />
+          </RadarChart>
+        );
+    }
+  };
 
   if (expenses.length === 0) {
     return (
@@ -37,27 +133,26 @@ const ExpensesChartPage: React.FC<ExpensesChartPageProps> = ({ expenses = [], is
   return (
     <div className={`min-h-screen p-4 ${isDarkTheme ? 'bg-gray-900 text-white' : 'bg-gray-100 text-black'}`}>
       <h2 className="text-2xl font-bold mb-4">Répartition des dépenses</h2>
+      <div className="mb-4">
+        <label htmlFor="chartType" className="mr-2">Type de graphique:</label>
+        <select
+          id="chartType"
+          value={chartType}
+          onChange={(e) => setChartType(e.target.value as 'pie' | 'doughnut' | 'bar' | 'line' | 'area' | 'radar')}
+          className={`p-2 rounded ${isDarkTheme ? 'bg-gray-700 text-white' : 'bg-white text-black'}`}
+        >
+          <option value="pie">Graphique circulaire</option>
+          <option value="doughnut">Graphique anneau</option>
+          <option value="bar">Graphique à barres</option>
+          <option value="line">Graphique linéaire</option>
+          <option value="area">Graphique de zone</option>
+          <option value="radar">Graphique radar</option>
+        </select>
+      </div>
       <div className="flex flex-col md:flex-row">
         <div className="w-full md:w-1/2">
           <ResponsiveContainer width="100%" height={400}>
-            <PieChart>
-              <Pie
-                data={chartData}
-                cx="50%"
-                cy="50%"
-                labelLine={false}
-                outerRadius={150}
-                fill="#8884d8"
-                dataKey="value"
-                label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-              >
-                {chartData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                ))}
-              </Pie>
-              <Tooltip />
-              <Legend />
-            </PieChart>
+            {renderChart()}
           </ResponsiveContainer>
         </div>
         <div className="w-full md:w-1/2 mt-4 md:mt-0 md:ml-4">
