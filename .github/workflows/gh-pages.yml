@@ -2,7 +2,9 @@ name: Build and Deploy
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
+      - new-feature  # Add the branch you are working on
 
 permissions:
   contents: write
@@ -22,7 +24,7 @@ jobs:
         with:
           node-version: '20'  # Explicitly set Node.js 20
 
-      # Step 3: Cache node_modules for faster builds
+      # Step 3: Cache node modules for faster builds
       - name: Cache node modules 📦
         uses: actions/cache@v3
         with:
@@ -35,5 +37,23 @@ jobs:
       - name: Install and Build 🔧
         run: |
           cd client
-          npm ci
-          npm run build
+          npm ci  # Install dependencies
+          npm run build  # Build the project
+
+      # Step 5: Disable Jekyll on GitHub Pages by creating .nojekyll file
+      - name: Disable Jekyll on GitHub Pages
+        run: |
+          touch client/build/.nojekyll
+
+      # Step 6: Deploy to GitHub Pages
+      - name: Deploy to GitHub Pages 🚀
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./client/build
+
+      # Step 7: Debug Jekyll Build
+      - name: Debug Jekyll Build
+        run: |
+          cd client
+          bundle exec jekyll build --trace
