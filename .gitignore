@@ -1,10 +1,4 @@
-# Ignore cache files in the default-development directory
-client/node_modules/.cache/default-development/*.pack
-
-# Ignore TypeScript build info file
-client/node_modules/.cache/tsconfig.tsbuildinfo
-
-# Ignore node_modules directory
-node_modules/
 node_modules/
 .cache/
+*.pack
+*.pack_
