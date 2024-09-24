@@ -30,4 +30,5 @@ jobs:
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: client/build
+          branch: gh-pages  # Specify the branch to deploy to
+          folder: client/build  # Specify the folder to deploy
