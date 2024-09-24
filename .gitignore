@@ -4,4 +4,8 @@ client/node_modules/.cache/tsconfig.tsbuildinfo
 =======
 node_modules/
 node_modules/
+node_modules/
+client/node_modules/.cache/default-development/*.pack
+client/node_modules/.cache/tsconfig.tsbuildinfo
+node_modules/
 >>>>>>> f0bed96 (Remove large file and update .gitignore to exclude node_modules)
