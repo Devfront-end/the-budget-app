@@ -10,7 +10,7 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <BrowserRouter basename="/the-budget-app">
-      <App />
+      <App expenses={[]} isDarkTheme={false} />
     </BrowserRouter>
   </React.StrictMode>
 );

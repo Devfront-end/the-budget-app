@@ -1,15 +1,11 @@
 import React, { useState } from 'react';
 import { Route, Routes, Link } from 'react-router-dom';
-import { Sun, Moon, Trash, Download } from 'lucide-react';
+import { Sun, Moon, Download, Trash } from 'lucide-react';
 import { CSVLink } from 'react-csv';
 import ExpensesChartPage from './components/ExpensesChartPage';
 import BudgetSummary from './components/BudgetSummary';
 import WishlistPage from './components/WishlistPage';
-
-interface IncomeItem {
-  description: string;
-  amount: number;
-}
+import Savings from './components/Savings';
 
 interface ExpenseItem {
   description: string;
@@ -17,24 +13,35 @@ interface ExpenseItem {
   date: string;
 }
 
-const App: React.FC = () => {
-  const [incomeCategories, setIncomeCategories] = useState<string[]>(['Salaire net', 'Primes', "Prime d'activité", 'Freelance', 'Investissements']);
+interface AppProps {
+  expenses: ExpenseItem[];
+  isDarkTheme: boolean;
+}
+
+const App: React.FC<AppProps> = ({ expenses: initialExpenses, isDarkTheme: initialIsDarkTheme }) => {
+  const [incomeCategories, setIncomeCategories] = useState<string[]>(['Salaire net', 'Primes', "Prime d'activité", 'Freelance', 'Investissements', 'ARE']);
   const [expenseCategories, setExpenseCategories] = useState<string[]>(['Loyer', 'Courses', 'Transport', 'Loisirs', 'Santé']);
-  const [income, setIncome] = useState<IncomeItem[]>([]);
-  const [expenses, setExpenses] = useState<ExpenseItem[]>([]);
+  const [income, setIncome] = useState<ExpenseItem[]>([]);
+  const [expenses, setExpenses] = useState<ExpenseItem[]>(initialExpenses);
   const [newIncome, setNewIncome] = useState<{ description: string; amount: string }>({ description: '', amount: '' });
   const [newExpense, setNewExpense] = useState<{ description: string; amount: string; date: string }>({ description: '', amount: '', date: '' });
   const [newCategory, setNewCategory] = useState<string>('');
-  const [isDarkTheme, setIsDarkTheme] = useState<boolean>(false);
+  const [isDarkTheme, setIsDarkTheme] = useState<boolean>(initialIsDarkTheme);
 
   const toggleTheme = () => setIsDarkTheme(!isDarkTheme);
 
   const totalIncome = income.reduce((sum, item) => sum + item.amount, 0);
   const totalExpenses = expenses.reduce((sum, item) => sum + item.amount, 0);
+  const balance = totalIncome - totalExpenses;
 
   const handleAddIncome = () => {
     if (newIncome.description && newIncome.amount) {
-      setIncome([...income, { ...newIncome, amount: Number(newIncome.amount) }]);
+      const newIncomeItem: ExpenseItem = {
+        ...newIncome,
+        amount: Number(newIncome.amount),
+        date: new Date().toISOString(),
+      };
+      setIncome([...income, newIncomeItem]);
       setNewIncome({ description: '', amount: '' });
     }
   };
@@ -69,8 +76,9 @@ const App: React.FC = () => {
         <h1 className="text-2xl font-bold">Budget App</h1>
         <nav>
           <Link to="/" className="mr-4">Home</Link>
-          <Link to="/expenses-chart">Répartition des dépenses</Link>
+          <Link to="/expenses-chart">Expenses</Link>
           <Link to="/wishlist" className="ml-4">Wishlist</Link>
+          <Link to="/savings" className="ml-4">Savings</Link>
         </nav>
         {isDarkTheme ? (
           <Sun className="cursor-pointer" onClick={toggleTheme} />
@@ -83,13 +91,13 @@ const App: React.FC = () => {
         <Route path="/" element={
           <main className="container mx-auto p-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="bg-white p-4 rounded-lg shadow">
+              <div className={`p-4 rounded-lg shadow ${isDarkTheme ? 'bg-gray-800' : 'bg-gray-200'}`}>
                 <h2 className="text-xl font-semibold mb-4">Entrées d'argent</h2>
                 <div className="flex flex-col space-y-2">
                   <select
                     value={newIncome.description}
                     onChange={(e) => setNewIncome({...newIncome, description: e.target.value})}
-                    className="p-2 border rounded"
+                    className={`p-2 border rounded ${isDarkTheme ? 'bg-gray-700 text-white' : 'bg-gray-100 text-black'}`}
                   >
                     <option value="">Sélectionner une catégorie</option>
                     {incomeCategories.map((category, index) => (
@@ -101,9 +109,9 @@ const App: React.FC = () => {
                     value={newIncome.amount}
                     onChange={(e) => setNewIncome({...newIncome, amount: e.target.value})}
                     placeholder="Montant"
-                    className="p-2 border rounded"
+                    className={`p-2 border rounded ${isDarkTheme ? 'bg-gray-700 text-white' : 'bg-gray-100 text-black'}`}
                   />
-                  <button onClick={handleAddIncome} className="bg-blue-500 text-white px-4 py-2 rounded">+ Ajouter</button>
+                  <button onClick={handleAddIncome} className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">+ Ajouter</button>
                 </div>
                 <div className="mt-2">
                   <input
@@ -111,19 +119,18 @@ const App: React.FC = () => {
                     value={newCategory}
                     onChange={(e) => setNewCategory(e.target.value)}
                     placeholder="Nouvelle catégorie"
-                    className="p-2 border rounded mr-2"
+                    className={`p-2 border rounded mr-2 ${isDarkTheme ? 'bg-gray-700 text-white' : 'bg-gray-100 text-black'}`}
                   />
-                  <button onClick={() => handleAddCategory('income')} className="bg-green-500 text-white px-4 py-2 rounded">+ Catégorie</button>
+                  <button onClick={() => handleAddCategory('income')} className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">+ Catégorie</button>
                 </div>
               </div>
-
-              <div className="bg-white p-4 rounded-lg shadow">
+              <div className={`p-4 rounded-lg shadow ${isDarkTheme ? 'bg-gray-800' : 'bg-gray-200'}`}>
                 <h2 className="text-xl font-semibold mb-4">Ajouter une dépense</h2>
                 <div className="flex flex-col space-y-2">
                   <select
                     value={newExpense.description}
                     onChange={(e) => setNewExpense({...newExpense, description: e.target.value})}
-                    className="p-2 border rounded"
+                    className={`p-2 border rounded ${isDarkTheme ? 'bg-gray-700 text-white' : 'bg-gray-100 text-black'}`}
                   >
                     <option value="">Sélectionner une catégorie</option>
                     {expenseCategories.map((category, index) => (
@@ -135,15 +142,15 @@ const App: React.FC = () => {
                     value={newExpense.amount}
                     onChange={(e) => setNewExpense({...newExpense, amount: e.target.value})}
                     placeholder="Montant"
-                    className="p-2 border rounded"
+                    className={`p-2 border rounded ${isDarkTheme ? 'bg-gray-700 text-white' : 'bg-gray-100 text-black'}`}
                   />
                   <input
                     type="date"
                     value={newExpense.date}
                     onChange={(e) => setNewExpense({...newExpense, date: e.target.value})}
-                    className="p-2 border rounded"
+                    className={`p-2 border rounded ${isDarkTheme ? 'bg-gray-700 text-white' : 'bg-gray-100 text-black'}`}
                   />
-                  <button onClick={handleAddExpense} className="bg-red-500 text-white px-4 py-2 rounded">+ Ajouter</button>
+                  <button onClick={handleAddExpense} className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">+ Ajouter</button>
                 </div>
                 <div className="mt-2">
                   <input
@@ -151,9 +158,9 @@ const App: React.FC = () => {
                     value={newCategory}
                     onChange={(e) => setNewCategory(e.target.value)}
                     placeholder="Nouvelle catégorie"
-                    className="p-2 border rounded mr-2"
+                    className={`p-2 border rounded mr-2 ${isDarkTheme ? 'bg-gray-700 text-white' : 'bg-gray-100 text-black'}`}
                   />
-                  <button onClick={() => handleAddCategory('expense')} className="bg-green-500 text-white px-4 py-2 rounded">+ Catégorie</button>
+                  <button onClick={() => handleAddCategory('expense')} className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">+ Catégorie</button>
                 </div>
               </div>
             </div>
@@ -211,6 +218,7 @@ const App: React.FC = () => {
         } />
         <Route path="/expenses-chart" element={<ExpensesChartPage expenses={expenses} isDarkTheme={isDarkTheme} />} />
         <Route path="/wishlist" element={<WishlistPage />} />
+        <Route path="/savings" element={<Savings balance={balance} />} />
       </Routes>
     </div>
   );
