@@ -1,4 +1,5 @@
+client/node_modules/.cache/default-development/*.pack
+client/node_modules/.cache/tsconfig.tsbuildinfo
 node_modules/
-.cache/
-*.pack
-*.pack_
+.env
+dist/

@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
-import { Route, Routes, Link } from 'react-router-dom';
+import { Route, Routes, Link, Navigate } from 'react-router-dom';
 import { Sun, Moon, Download, Trash } from 'lucide-react';
 import { CSVLink } from 'react-csv';
 import ExpensesChartPage from './components/ExpensesChartPage';
 import BudgetSummary from './components/BudgetSummary';
 import WishlistPage from './components/WishlistPage';
 import Savings from './components/Savings';
+import { LoginForm } from './components/LoginForm';
+import { SignUpForm } from './components/SignUpForm';
+import { FaUserCircle } from 'react-icons/fa';
+import Modal from './components/Modal';
 
 interface ExpenseItem {
   description: string;
@@ -23,10 +27,20 @@ const App: React.FC<AppProps> = ({ expenses: initialExpenses, isDarkTheme: initi
   const [expenseCategories, setExpenseCategories] = useState<string[]>(['Loyer', 'Courses', 'Transport', 'Loisirs', 'Santé']);
   const [income, setIncome] = useState<ExpenseItem[]>([]);
   const [expenses, setExpenses] = useState<ExpenseItem[]>(initialExpenses);
-  const [newIncome, setNewIncome] = useState<{ description: string; amount: string }>({ description: '', amount: '' });
+  const [newIncome, setNewIncome] = useState<{ description: string; amount: string; date: string }>({ description: '', amount: '', date: '' });
   const [newExpense, setNewExpense] = useState<{ description: string; amount: string; date: string }>({ description: '', amount: '', date: '' });
   const [newCategory, setNewCategory] = useState<string>('');
   const [isDarkTheme, setIsDarkTheme] = useState<boolean>(initialIsDarkTheme);
+  const [showAuthModal, setShowAuthModal] = useState(false); // Modal visibility state
+  const [isLogin, setIsLogin] = useState(true); // Toggle between login and signup forms
+
+  const toggleAuthModal = () => {
+    setShowAuthModal(!showAuthModal); // Toggle modal visibility
+  };
+
+  const toggleAuthForm = () => {
+    setIsLogin(!isLogin); // Toggle between login and signup forms
+  };
 
   const toggleTheme = () => setIsDarkTheme(!isDarkTheme);
 
@@ -35,14 +49,13 @@ const App: React.FC<AppProps> = ({ expenses: initialExpenses, isDarkTheme: initi
   const balance = totalIncome - totalExpenses;
 
   const handleAddIncome = () => {
-    if (newIncome.description && newIncome.amount) {
+    if (newIncome.description && newIncome.amount && newIncome.date) {
       const newIncomeItem: ExpenseItem = {
         ...newIncome,
         amount: Number(newIncome.amount),
-        date: new Date().toISOString(),
       };
       setIncome([...income, newIncomeItem]);
-      setNewIncome({ description: '', amount: '' });
+      setNewIncome({ description: '', amount: '', date: '' });
     }
   };
 
@@ -80,13 +93,19 @@ const App: React.FC<AppProps> = ({ expenses: initialExpenses, isDarkTheme: initi
           <Link to="/wishlist" className="ml-4">Wishlist</Link>
           <Link to="/savings" className="ml-4">Savings</Link>
         </nav>
+        {/* User Icon and Connect Link */}
+        <div className="flex items-center">
+          <FaUserCircle size={24} className="mr-2 cursor-pointer" onClick={toggleAuthModal} />
+          <span className="cursor-pointer" onClick={toggleAuthModal}>Connect</span>
+        </div>
+        {/* Dark mode toggle */}
         {isDarkTheme ? (
           <Sun className="cursor-pointer" onClick={toggleTheme} />
         ) : (
           <Moon className="cursor-pointer" onClick={toggleTheme} />
         )}
       </header>
-
+      {/* Main content */}
       <Routes>
         <Route path="/" element={
           <main className="container mx-auto p-4">
@@ -109,6 +128,12 @@ const App: React.FC<AppProps> = ({ expenses: initialExpenses, isDarkTheme: initi
                     value={newIncome.amount}
                     onChange={(e) => setNewIncome({...newIncome, amount: e.target.value})}
                     placeholder="Montant"
+                    className={`p-2 border rounded ${isDarkTheme ? 'bg-gray-700 text-white' : 'bg-gray-100 text-black'}`}
+                  />
+                  <input
+                    type="date"
+                    value={newIncome.date}
+                    onChange={(e) => setNewIncome({...newIncome, date: e.target.value})}
                     className={`p-2 border rounded ${isDarkTheme ? 'bg-gray-700 text-white' : 'bg-gray-100 text-black'}`}
                   />
                   <button onClick={handleAddIncome} className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">+ Ajouter</button>
@@ -164,12 +189,54 @@ const App: React.FC<AppProps> = ({ expenses: initialExpenses, isDarkTheme: initi
                 </div>
               </div>
             </div>
-
             {/* Budget Summary */}
             <div className="container mx-auto mt-8">
               <BudgetSummary totalIncome={totalIncome} totalExpenses={totalExpenses} />
             </div>
-
+            {/* Render Income Section */}
+            <div className="mt-8">
+              <h2 className="text-xl font-semibold mb-4">Entrées d'argent</h2>
+              <div className="flex justify-between items-center mb-4">
+                <input
+                  type="text"
+                  placeholder="Rechercher des entrées..."
+                  className="w-full p-2 border rounded"
+                />
+                <CSVLink
+                  data={income}
+                  headers={csvHeaders}
+                  filename="income.csv"
+                  className="ml-4 text-blue-500 hover:text-blue-700"
+                >
+                  <Download className="w-6 h-6" />
+                </CSVLink>
+              </div>
+              <ul>
+                {income.map((incomeItem, index) => (
+                  <li
+                    key={index}
+                    className="flex justify-between items-center border-b py-2"
+                  >
+                    <div>
+                      <span className="font-semibold">{incomeItem.description}</span>
+                      <span className="text-gray-500 ml-2">{incomeItem.date}</span> {/* Display the date */}
+                    </div>
+                    <div className="flex items-center">
+                      <span className="text-green-500">{incomeItem.amount} €</span>
+                      <button
+                        onClick={() => {
+                          const updatedIncome = income.filter((_, i) => i !== index);
+                          setIncome(updatedIncome);
+                        }}
+                        className="ml-4 text-red-500 hover:text-red-700"
+                      >
+                        <Trash className="w-6 h-6" />
+                      </button>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
             <div className="mt-8">
               <h2 className="text-xl font-semibold mb-4">Sorties d'argent</h2>
               <div className="flex justify-between items-center mb-4">
@@ -219,7 +286,17 @@ const App: React.FC<AppProps> = ({ expenses: initialExpenses, isDarkTheme: initi
         <Route path="/expenses-chart" element={<ExpensesChartPage expenses={expenses} isDarkTheme={isDarkTheme} />} />
         <Route path="/wishlist" element={<WishlistPage />} />
         <Route path="/savings" element={<Savings balance={balance} />} />
+        <Route path="*" element={<Navigate to="/" />} /> {/* Catch-all route for redirection */}
       </Routes>
+
+      {/* Authentication Modal */}
+      <Modal isOpen={showAuthModal} onClose={toggleAuthModal}>
+        {isLogin ? (
+          <LoginForm onSwitchForm={toggleAuthForm} />
+        ) : (
+          <SignUpForm onSwitchForm={toggleAuthForm} />
+        )}
+      </Modal>
     </div>
   );
 };
