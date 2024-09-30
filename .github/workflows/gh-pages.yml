@@ -4,7 +4,7 @@ on:
   push:
     branches: 
       - main
-      - new-feature
+      - new-feature  # Trigger on the 'new-feature' branch
 
 permissions:
   contents: write
@@ -12,23 +12,33 @@ permissions:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+
     steps:
+      # Step 1: Checkout the repository code
       - name: Checkout 🛎️
         uses: actions/checkout@v4
 
+      # Step 2: Set up Node.js environment (Node.js 20)
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20'  # Specify Node.js version
+          node-version: '20'
 
+      # Step 3: Install dependencies and build the project
       - name: Install and Build 🔧
         run: |
           cd client
-          npm ci
-          npm run build
+          npm ci  # Install dependencies based on package-lock.json
+          npm run build  # Run the build script
 
+      # Step 4: Exclude unnecessary files from Jekyll (Optional for GitHub Pages build)
+      - name: Setup Jekyll Config
+        run: |
+          echo "exclude:\n  - node_modules\n  - Gemfile\n  - Gemfile.lock\n  - README.md" > _config.yml
+
+      # Step 5: Deploy to GitHub Pages from the 'new-feature' branch
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          branch: gh-pages  # Specify the branch to deploy to
+          branch: new-feature  # Specify the 'new-feature' branch to deploy to
           folder: client/build  # Specify the folder to deploy
