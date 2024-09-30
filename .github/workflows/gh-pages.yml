@@ -1,13 +1,10 @@
-name: GitHub Pages deploy
+name: Build and Deploy
 
 on:
   push:
-    branches: 
+    branches:
       - main
-      - new-feature
-
-permissions:
-  contents: write
+      - new-feature  # Add the branch you are working on
 
 jobs:
   build-and-deploy:
@@ -36,9 +33,9 @@ jobs:
         run: |
           echo "exclude:\n  - node_modules\n  - Gemfile\n  - Gemfile.lock\n  - README.md" > _config.yml
 
-      # Step 5: Deploy to GitHub Pages from the 'new-feature' branch
-      - name: Deploy 🚀
-        uses: JamesIves/github-pages-deploy-action@v4
+      # Step 5: Deploy to GitHub Pages
+      - name: Deploy to GitHub Pages 🚀
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          branch: new-feature  # Specify the 'new-feature' branch to deploy to
-          folder: client/build  # Specify the folder to deploy
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./client/build
