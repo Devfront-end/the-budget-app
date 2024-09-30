@@ -19,7 +19,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20'  # Explicitly set Node.js 20 to avoid deprecated version warnings
+          node-version: '20'  # Explicitly set Node.js 20
 
       # Step 3: Cache node_modules for faster builds
       - name: Cache node modules 📦
@@ -34,10 +34,10 @@ jobs:
       - name: Install and Build 🔧
         run: |
           cd client
-          npm ci  # Install dependencies based on package-lock.json
-          npm run build  # Run the build script
+          npm ci  # Install dependencies
+          npm run build  # Build the project
 
-      # Step 5: Create a .nojekyll file to prevent Jekyll processing
+      # Step 5: Disable Jekyll on GitHub Pages by creating .nojekyll file
       - name: Disable Jekyll on GitHub Pages
         run: |
           touch client/build/.nojekyll
