@@ -21,19 +21,28 @@ jobs:
         with:
           node-version: '20'  # Explicitly set Node.js 20 to avoid deprecated version warnings
 
-      # Step 3: Install dependencies and build the project
+      # Step 3: Cache node_modules for faster builds
+      - name: Cache node modules 📦
+        uses: actions/cache@v3
+        with:
+          path: client/node_modules
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('client/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-modules-
+
+      # Step 4: Install dependencies and build the project
       - name: Install and Build 🔧
         run: |
           cd client
           npm ci  # Install dependencies based on package-lock.json
           npm run build  # Run the build script
 
-      # Step 4: Exclude unnecessary files from Jekyll (Optional for GitHub Pages build)
-      - name: Setup Jekyll Config
+      # Step 5: Create a .nojekyll file to prevent Jekyll processing
+      - name: Disable Jekyll on GitHub Pages
         run: |
-          echo "exclude:\n  - node_modules\n  - Gemfile\n  - Gemfile.lock\n  - README.md" > _config.yml
+          touch client/build/.nojekyll
 
-      # Step 5: Deploy to GitHub Pages
+      # Step 6: Deploy to GitHub Pages
       - name: Deploy to GitHub Pages 🚀
         uses: peaceiris/actions-gh-pages@v3
         with:
