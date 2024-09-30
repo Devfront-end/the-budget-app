@@ -4,7 +4,7 @@ on:
   push:
     branches: 
       - main
-      - new-feature  # Trigger on the 'new-feature' branch
+      - new-feature
 
 permissions:
   contents: write
@@ -22,7 +22,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20'
+          node-version: '20'  # Explicitly set Node.js 20 to avoid deprecated version warnings
 
       # Step 3: Install dependencies and build the project
       - name: Install and Build 🔧
