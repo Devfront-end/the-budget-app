@@ -1,7 +1,7 @@
 import React from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from './ui/dialog'; // Update the path if needed
-import { LoginForm } from './LoginForm'; // Use named import
-import { SignUpForm } from './SignUpForm'; // Use named import
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from './ui/dialog';
+import { LoginForm } from './LoginForm';
+import SignUpForm from './SignUpForm';
 
 interface AuthModalProps {
   onClose: () => void;
@@ -18,10 +18,14 @@ const AuthModal: React.FC<AuthModalProps> = ({ onClose, isLogin, setIsLogin }) =
         <DialogTitle>{isLogin ? 'Login' : 'Sign Up'}</DialogTitle>
       </DialogHeader>
       <DialogContent>
-        {isLogin ? <LoginForm onSwitchForm={toggleForm} /> : <SignUpForm onSwitchForm={toggleForm} />}
+        {isLogin ? (
+          <LoginForm onSwitchForm={toggleForm} />
+        ) : (
+          <SignUpForm onSwitchForm={toggleForm} />
+        )}
       </DialogContent>
     </Dialog>
   );
 };
 
-export default AuthModal; // Ensure default export
+export default AuthModal;

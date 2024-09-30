@@ -1,6 +1,6 @@
 import React from 'react';
-import FacebookLogo from '../img/512px-Facebook_Logo_2023.png';
-import GoogleLogo from '../img/GMail New Icon.svg';
+import facebookLogo from '../assets/img/512px-Facebook_Logo_2023.png';
+import googleLogo from '../assets/img/GMail New Icon.svg';
 
 interface LoginFormProps {
   onSwitchForm: () => void;
@@ -75,7 +75,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSwitchForm }) => {
           onClick={handleGoogleLogin}
           className="flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm hover:bg-gray-100"
         >
-          <img src={GoogleLogo} alt="Google" className="w-6 h-6 mr-2" />
+          <img src={googleLogo} alt="Google" className="w-6 h-6 mr-2" />
           Log In with Google
         </button>
         <button
@@ -83,7 +83,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSwitchForm }) => {
           onClick={handleFacebookLogin}
           className="flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm hover:bg-gray-100"
         >
-          <img src={FacebookLogo} alt="Facebook" className="w-6 h-6 mr-2" />
+          <img src={facebookLogo} alt="Facebook" className="w-6 h-6 mr-2" />
           Log In with Facebook
         </button>
       </div>

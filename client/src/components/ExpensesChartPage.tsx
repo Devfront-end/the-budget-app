@@ -1,29 +1,56 @@
 import React, { useState } from 'react';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faShoppingCart,
+  faHome,
+  faUtensils,
+  faCar,
+  faBolt,
+  faQuestionCircle,
+} from "@fortawesome/free-solid-svg-icons";
 import { PieChart, Pie, Cell, Legend, Tooltip, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, LineChart, Line, AreaChart, Area, RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis } from 'recharts';
+
+// Define a union type for expense types
+type ExpenseType =
+  | "groceries"
+  | "rent"
+  | "dining"
+  | "transportation"
+  | "utilities"
+  | "income"
+  | "expense";
+
+// Use the union type as keys for the expenseTypeToIcon object
+const expenseTypeToIcon: Record<ExpenseType, any> = {
+  groceries: faShoppingCart,
+  rent: faHome,
+  dining: faUtensils,
+  transportation: faCar,
+  utilities: faBolt,
+  income: faQuestionCircle, // Example icon for income
+  expense: faQuestionCircle, // Example icon for expense
+  // Add more mappings as needed
+};
 
 interface ExpenseItem {
   description: string;
   amount: number;
   date: string;
+  type: ExpenseType;
 }
 
 interface ExpensesChartPageProps {
-  expenses?: ExpenseItem[];
+  expenses: ExpenseItem[];
   isDarkTheme: boolean;
 }
 
-const ExpensesChartPage: React.FC<ExpensesChartPageProps> = ({ expenses = [], isDarkTheme }) => {
-  const [chartType, setChartType] = useState<'pie' | 'doughnut' | 'bar' | 'line' | 'area' | 'radar'>('pie');
+const ExpensesChartPage: React.FC<ExpensesChartPageProps> = ({ expenses, isDarkTheme }) => {
+  const [chartType, setChartType] = useState<'pie' | 'doughnut' | 'bar' | 'line' | 'area' | 'radar'>('bar');
 
-  const chartData = expenses.reduce((acc, expense) => {
-    const existingCategory = acc.find(item => item.name === expense.description);
-    if (existingCategory) {
-      existingCategory.value += expense.amount;
-    } else {
-      acc.push({ name: expense.description, value: expense.amount });
-    }
-    return acc;
-  }, [] as { name: string; value: number }[]);
+  const chartData = expenses.map(expense => ({
+    name: expense.description,
+    value: expense.amount
+  }));
 
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', '#82ca9d'];
 
@@ -167,7 +194,13 @@ const ExpensesChartPage: React.FC<ExpensesChartPageProps> = ({ expenses = [], is
             <tbody>
               {expenses.map((expense, index) => (
                 <tr key={index} className={index % 2 === 0 ? 'bg-gray-100' : 'bg-white'}>
-                  <td className="border px-4 py-2">{expense.description}</td>
+                  <td className="border px-4 py-2">
+                    <FontAwesomeIcon
+                      icon={expenseTypeToIcon[expense.type] || faQuestionCircle}
+                      className="inline-block w-6 h-6 mr-2"
+                    />
+                    {expense.description}
+                  </td>
                   <td className="border px-4 py-2">{expense.amount.toFixed(2)} €</td>
                   <td className="border px-4 py-2">{expense.date}</td>
                 </tr>

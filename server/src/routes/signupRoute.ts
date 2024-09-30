@@ -2,7 +2,7 @@ import { Router, Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import nodemailer from 'nodemailer';
 import dotenv from 'dotenv';
-import pool from '../config/db';
+import pool from '../config/db';  // PostgreSQL connection setup
 
 dotenv.config();
 
@@ -35,22 +35,37 @@ const sendWelcomeEmail = async (toEmail: string, username: string): Promise<void
   }
 };
 
+// Registration route
 router.post('/signup', async (req: Request, res: Response) => {
   console.log('Received signup request:', req.body);
   const { username, email, password } = req.body;
 
+  // Validate input
   if (!username || !email || !password) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
 
   let result;
   try {
-    const hashedPassword = await bcrypt.hash(password, 10);
+    // Check if email is already registered
+    const emailCheckQuery = 'SELECT * FROM users WHERE email = $1';
+    const emailResult = await pool.query(emailCheckQuery, [email]);
+
+    if (emailResult.rows.length > 0) {
+      return res.status(400).json({ message: 'Email already registered' });
+    }
+
+    // Hash the password using bcrypt before saving to the database
+    const hashedPassword = await bcrypt.hash(password, 10);  // 10 rounds of salting
+    console.log('Hashed password:', hashedPassword);  // Debugging
+
+    // Insert the user with the hashed password into the database
     result = await pool.query(
       'INSERT INTO users (username, email, password) VALUES ($1, $2, $3) RETURNING id',
       [username, email, hashedPassword]
     );
 
+    // Send welcome email
     await sendWelcomeEmail(email, username);
 
     res.status(201).json({ 
@@ -60,18 +75,20 @@ router.post('/signup', async (req: Request, res: Response) => {
   } catch (error: any) {
     console.error('Detailed signup error:', error);
     
-    if (error.code === '23505') {
+    // Handle specific database errors
+    if (error.code === '23505') {  // Unique constraint violation
       return res.status(409).json({ error: 'Username or email already exists' });
     }
     
-    if (error.code === '23502') {
+    if (error.code === '23502') {  // Null value constraint violation
       return res.status(400).json({ error: 'All fields are required' });
     }
 
-    if (error.code === '42P01') {
+    if (error.code === '42P01') {  // Undefined table error
       return res.status(500).json({ error: 'Database schema error. Please contact support.' });
     }
 
+    // Handle email sending failure
     if (error.message && error.message.includes('email')) {
       console.error('Email sending failed:', error);
       return res.status(201).json({ 
@@ -80,6 +97,7 @@ router.post('/signup', async (req: Request, res: Response) => {
       });
     }
 
+    // Generic server error
     res.status(500).json({ 
       error: 'Server error. Please try again.', 
       details: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error'
