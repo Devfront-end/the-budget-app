@@ -1,6 +1,8 @@
+// types.ts
 export interface ExpenseItem {
+  id: string;
   description: string;
   amount: number;
   date: string;
-  type: 'groceries' | 'rent' | 'dining' | 'transportation' | 'utilities' | 'income' | 'expense';
+  type: 'income' | 'expense';
 }
