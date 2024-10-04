@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Route, Routes, Link, Navigate } from "react-router-dom";
-import { Sun, Moon, Trash } from "lucide-react";
-import { CSVLink } from "react-csv";
+import { Sun, Moon } from "lucide-react";
 import ExpensesChartPage from "./components/ExpensesChartPage";
 import BudgetSummary from "./components/BudgetSummary";
 import WishlistPage from "./components/WishlistPage";
@@ -12,10 +11,10 @@ import { FaUserCircle } from "react-icons/fa";
 import Modal from "./components/Modal";
 import csvIcon from "./assets/img/csv-icon.png";
 import googleSheetsIcon from "./assets/img/google-sheets-icon.png";
-import { ExpenseItem } from "./types";
 import MySubscriptionsPage from "./components/MySubscriptionsPage";
 import MyIncomePage from "./components/MyIncomePage";
-import DashboardPage from "./components/DashboardPage";  // Import new components
+import DashboardPage from "./components/DashboardPage"; // Import new components
+import { ExpenseItem } from "./types";
 
 interface AppProps {
   expenses: ExpenseItem[];
@@ -26,25 +25,43 @@ const App: React.FC<AppProps> = ({
   expenses: initialExpenses,
   isDarkTheme: initialIsDarkTheme,
 }) => {
-  const [incomeCategories, setIncomeCategories] = useState<string[]>([
-    'Salaire net', 'Primes', "Prime d'activité", 'Freelance', 'Investissements', 'ARE'
+  const [incomeCategories] = useState<string[]>([
+    "Salaire net",
+    "Primes",
+    "Prime d'activité",
+    "Freelance",
+    "Investissements",
+    "ARE",
   ]);
-  const [expenseCategories, setExpenseCategories] = useState<string[]>(['Loyer', 'Courses', 'Transport', 'Loisirs', 'Santé']);
+  const [expenseCategories] = useState<string[]>([
+    "Loyer",
+    "Courses",
+    "Transport",
+    "Loisirs",
+    "Santé",
+  ]);
   const [income, setIncome] = useState<ExpenseItem[]>([]);
   const [expenses, setExpenses] = useState<ExpenseItem[]>(initialExpenses);
-  const [newIncome, setNewIncome] = useState<{ description: string; amount: string; date: string }>({ description: '', amount: '', date: '' });
-  const [newExpense, setNewExpense] = useState<{ description: string; amount: string; date: string }>({ description: '', amount: '', date: '' });
-  const [newCategory, setNewCategory] = useState<string>('');
+  const [newIncome, setNewIncome] = useState<{
+    description: string;
+    amount: string;
+    date: string;
+  }>({ description: "", amount: "", date: "" });
+  const [newExpense, setNewExpense] = useState<{
+    description: string;
+    amount: string;
+    date: string;
+  }>({ description: "", amount: "", date: "" });
   const [isDarkTheme, setIsDarkTheme] = useState<boolean>(initialIsDarkTheme);
-  const [showAuthModal, setShowAuthModal] = useState(false); // Modal visibility state
-  const [isLogin, setIsLogin] = useState(true); // Toggle between login and signup forms
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [isLogin, setIsLogin] = useState(true);
 
   const toggleAuthModal = () => {
-    setShowAuthModal(!showAuthModal); // Toggle modal visibility
+    setShowAuthModal(!showAuthModal);
   };
 
   const toggleAuthForm = () => {
-    setIsLogin(!isLogin); // Toggle between login and signup forms
+    setIsLogin(!isLogin);
   };
 
   const toggleTheme = () => setIsDarkTheme(!isDarkTheme);
@@ -60,10 +77,10 @@ const App: React.FC<AppProps> = ({
         description: newIncome.description,
         amount: Number(newIncome.amount),
         date: newIncome.date,
-        type: 'income', // Add the type property
+        type: "income",
       };
       setIncome([...income, newIncomeItem]);
-      setNewIncome({ description: '', amount: '', date: '' });
+      setNewIncome({ description: "", amount: "", date: "" });
     }
   };
 
@@ -74,47 +91,53 @@ const App: React.FC<AppProps> = ({
         description: newExpense.description,
         amount: Number(newExpense.amount),
         date: newExpense.date,
-        type: 'expense', // Add the type property
+        type: "expense",
       };
       setExpenses([...expenses, newExpenseItem]);
-      setNewExpense({ description: '', amount: '', date: '' });
+      setNewExpense({ description: "", amount: "", date: "" });
     }
   };
-
-  const handleAddCategory = (type: 'income' | 'expense') => {
-    if (newCategory) {
-      if (type === 'income') {
-        setIncomeCategories([...incomeCategories, newCategory]);
-      } else {
-        setExpenseCategories([...expenseCategories, newCategory]);
-      }
-      setNewCategory('');
-    }
-  };
-
-  const csvHeaders = [
-    { label: 'Description', key: 'description' },
-    { label: 'Amount', key: 'amount' },
-    { label: 'Date', key: 'date' }
-  ];
 
   return (
-    <div className={`min-h-screen ${isDarkTheme ? 'bg-gray-900 text-white' : 'bg-gray-100 text-black'}`}>
+    <div
+      className={`min-h-screen ${
+        isDarkTheme ? "bg-gray-900 text-white" : "bg-gray-100 text-black"
+      }`}
+    >
       <header className="bg-indigo-600 text-white p-4 flex justify-between items-center">
         <h1 className="text-2xl font-bold">Budget App</h1>
         <nav>
-          <Link to="/" className="mr-4">Home</Link>
-          <Link to="/expenses-chart" className="mr-4">Expenses</Link>
-          <Link to="/wishlist" className="mr-4">Wishlist</Link>
-          <Link to="/savings" className="mr-4">Savings</Link>
-          {/* Add new links to the navbar */}
-          <Link to="/subscriptions" className="mr-4">My Subscriptions</Link>
-          <Link to="/income" className="mr-4">My Income</Link>
-          <Link to="/dashboard" className="mr-4">Dashboard</Link>
+          <Link to="/" className="mr-4">
+            Home
+          </Link>
+          <Link to="/expenses-chart" className="mr-4">
+            Expenses
+          </Link>
+          <Link to="/wishlist" className="mr-4">
+            Wishlist
+          </Link>
+          <Link to="/savings" className="mr-4">
+            Savings
+          </Link>
+          <Link to="/subscriptions" className="mr-4">
+            My Subscriptions
+          </Link>
+          <Link to="/income" className="mr-4">
+            My Income
+          </Link>
+          <Link to="/dashboard" className="mr-4">
+            Dashboard
+          </Link>
         </nav>
         <div className="flex items-center">
-          <FaUserCircle size={24} className="mr-2 cursor-pointer" onClick={toggleAuthModal} />
-          <span className="cursor-pointer" onClick={toggleAuthModal}>Connect</span>
+          <FaUserCircle
+            size={24}
+            className="mr-2 cursor-pointer"
+            onClick={toggleAuthModal}
+          />
+          <span className="cursor-pointer" onClick={toggleAuthModal}>
+            Connect
+          </span>
         </div>
         {isDarkTheme ? (
           <Sun className="cursor-pointer" onClick={toggleTheme} />
@@ -123,14 +146,187 @@ const App: React.FC<AppProps> = ({
         )}
       </header>
       <Routes>
-        <Route path="/" element={<main className="container mx-auto p-4">{/* Your main component logic */}</main>} />
-        <Route path="/expenses-chart" element={<ExpensesChartPage expenses={expenses} isDarkTheme={isDarkTheme} />} />
+        <Route
+          path="/"
+          element={
+            <main className="container mx-auto p-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Income Section */}
+                <div
+                  className={`p-4 rounded-lg shadow ${
+                    isDarkTheme ? "bg-gray-800" : "bg-gray-200"
+                  }`}
+                >
+                  <h2 className="text-xl font-semibold mb-4">
+                    Entrées d'argent
+                  </h2>
+                  <div className="flex flex-col space-y-2">
+                    <select
+                      value={newIncome.description}
+                      onChange={(e) =>
+                        setNewIncome({
+                          ...newIncome,
+                          description: e.target.value,
+                        })
+                      }
+                      className={`p-2 border rounded ${
+                        isDarkTheme
+                          ? "bg-gray-700 text-white"
+                          : "bg-gray-100 text-black"
+                      }`}
+                    >
+                      <option value="">Sélectionner une catégorie</option>
+                      {incomeCategories.map((category, index) => (
+                        <option key={index} value={category}>
+                          {category}
+                        </option>
+                      ))}
+                    </select>
+                    <input
+                      type="number"
+                      value={newIncome.amount}
+                      onChange={(e) =>
+                        setNewIncome({ ...newIncome, amount: e.target.value })
+                      }
+                      placeholder="Montant"
+                      className={`p-2 border rounded ${
+                        isDarkTheme
+                          ? "bg-gray-700 text-white"
+                          : "bg-gray-100 text-black"
+                      }`}
+                    />
+                    <input
+                      type="date"
+                      value={newIncome.date}
+                      onChange={(e) =>
+                        setNewIncome({ ...newIncome, date: e.target.value })
+                      }
+                      className={`p-2 border rounded ${
+                        isDarkTheme
+                          ? "bg-gray-700 text-white"
+                          : "bg-gray-100 text-black"
+                      }`}
+                    />
+                    <button
+                      onClick={handleAddIncome}
+                      className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                    >
+                      + Ajouter
+                    </button>
+                  </div>
+                  <div className="flex items-center space-x-2 mt-4">
+                    <button className="inline-block">
+                      <img src={csvIcon} alt="CSV Icon" className="w-6 h-6" />
+                    </button>
+                    <button className="inline-block">
+                      <img
+                        src={googleSheetsIcon}
+                        alt="Google Sheets Icon"
+                        className="w-6 h-6"
+                      />
+                    </button>
+                  </div>
+                </div>
+                {/* Expense Section */}
+                <div
+                  className={`p-4 rounded-lg shadow ${
+                    isDarkTheme ? "bg-gray-800" : "bg-gray-200"
+                  }`}
+                >
+                  <h2 className="text-xl font-semibold mb-4">
+                    Ajouter une dépense
+                  </h2>
+                  <div className="flex flex-col space-y-2">
+                    <select
+                      value={newExpense.description}
+                      onChange={(e) =>
+                        setNewExpense({
+                          ...newExpense,
+                          description: e.target.value,
+                        })
+                      }
+                      className={`p-2 border rounded ${
+                        isDarkTheme
+                          ? "bg-gray-700 text-white"
+                          : "bg-gray-100 text-black"
+                      }`}
+                    >
+                      <option value="">Sélectionner une catégorie</option>
+                      {expenseCategories.map((category, index) => (
+                        <option key={index} value={category}>
+                          {category}
+                        </option>
+                      ))}
+                    </select>
+                    <input
+                      type="number"
+                      value={newExpense.amount}
+                      onChange={(e) =>
+                        setNewExpense({ ...newExpense, amount: e.target.value })
+                      }
+                      placeholder="Montant"
+                      className={`p-2 border rounded ${
+                        isDarkTheme
+                          ? "bg-gray-700 text-white"
+                          : "bg-gray-100 text-black"
+                      }`}
+                    />
+                    <input
+                      type="date"
+                      value={newExpense.date}
+                      onChange={(e) =>
+                        setNewExpense({ ...newExpense, date: e.target.value })
+                      }
+                      className={`p-2 border rounded ${
+                        isDarkTheme
+                          ? "bg-gray-700 text-white"
+                          : "bg-gray-100 text-black"
+                      }`}
+                    />
+                    <button
+                      onClick={handleAddExpense}
+                      className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+                    >
+                      + Ajouter
+                    </button>
+                  </div>
+                  <div className="flex items-center space-x-2 mt-4">
+                    <button className="inline-block">
+                      <img src={csvIcon} alt="CSV Icon" className="w-6 h-6" />
+                    </button>
+                    <button className="inline-block">
+                      <img
+                        src={googleSheetsIcon}
+                        alt="Google Sheets Icon"
+                        className="w-6 h-6"
+                      />
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div className="container mx-auto mt-8">
+                <BudgetSummary
+                  totalIncome={totalIncome}
+                  totalExpenses={totalExpenses}
+                />
+              </div>
+            </main>
+          }
+        />
+        <Route
+          path="/expenses-chart"
+          element={
+            <ExpensesChartPage expenses={expenses} isDarkTheme={isDarkTheme} />
+          }
+        />
         <Route path="/wishlist" element={<WishlistPage />} />
         <Route path="/savings" element={<Savings balance={balance} />} />
-        {/* Add new routes */}
         <Route path="/subscriptions" element={<MySubscriptionsPage />} />
         <Route path="/income" element={<MyIncomePage />} />
-        <Route path="/dashboard" element={<DashboardPage />} />
+        <Route
+          path="/dashboard"
+          element={<DashboardPage income={income} expenses={expenses} />}
+        />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
       <Modal isOpen={showAuthModal} onClose={toggleAuthModal}>
