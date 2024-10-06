@@ -6,9 +6,13 @@ on:
   pull_request:
     branches: [ main ]
 
+permissions:
+  contents: write  # Only grant write permissions to contents
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+
     steps:
     - name: Checkout 🛎️
       uses: actions/checkout@v3
@@ -16,7 +20,7 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '20'
+        node-version: '20' # Adjust this to your Node.js version
 
     - name: Install Dependencies
       run: npm ci
@@ -24,11 +28,11 @@ jobs:
     - name: Build
       run: npm run build
       env:
-        CI: false
+        CI: true
 
     - name: Deploy to GitHub Pages 🚀
+      if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
       uses: peaceiris/actions-gh-pages@v3
-      if: github.ref == 'refs/heads/main'
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./build
+        publish_dir: ./build # Adjust this to your build output directory
