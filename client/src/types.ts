@@ -1,7 +1,7 @@
-// types.ts
 export interface ExpenseItem {
-    description: string;
-    amount: number;
-    date: string;
-  }
-  
+  id: string;
+  amount: number;
+  date: string;
+  type: string; // Add this line
+  description: string;
+}

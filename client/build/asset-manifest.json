@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.css": "/the-budget-app/static/css/main.00258bd0.css",
-    "main.js": "/the-budget-app/static/js/main.ca2c3441.js",
+    "main.css": "/the-budget-app/static/css/main.6ded391c.css",
+    "main.js": "/the-budget-app/static/js/main.76c1ecea.js",
     "static/js/213.1ea94365.chunk.js": "/the-budget-app/static/js/213.1ea94365.chunk.js",
     "static/js/732.514645d3.chunk.js": "/the-budget-app/static/js/732.514645d3.chunk.js",
     "static/media/512px-Facebook_Logo_2023.png": "/the-budget-app/static/media/512px-Facebook_Logo_2023.bc19633ac1474ddc9136.png",
     "static/media/GMail New Icon.svg": "/the-budget-app/static/media/GMail New Icon.e80ace0fe6f323e6134803dc2e5ea9cf.svg",
     "index.html": "/the-budget-app/index.html",
-    "main.00258bd0.css.map": "/the-budget-app/static/css/main.00258bd0.css.map",
-    "main.ca2c3441.js.map": "/the-budget-app/static/js/main.ca2c3441.js.map",
+    "main.6ded391c.css.map": "/the-budget-app/static/css/main.6ded391c.css.map",
+    "main.76c1ecea.js.map": "/the-budget-app/static/js/main.76c1ecea.js.map",
     "213.1ea94365.chunk.js.map": "/the-budget-app/static/js/213.1ea94365.chunk.js.map",
     "732.514645d3.chunk.js.map": "/the-budget-app/static/js/732.514645d3.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.00258bd0.css",
-    "static/js/main.ca2c3441.js"
+    "static/css/main.6ded391c.css",
+    "static/js/main.76c1ecea.js"
   ]
 }
