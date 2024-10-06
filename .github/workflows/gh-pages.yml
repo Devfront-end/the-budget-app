@@ -2,11 +2,13 @@ name: Deploy React TypeScript app to GitHub Pages
 
 on:
   push:
-    branches: 
+    branches:
       - main
       - feature/new-dashboard
   pull_request:
-    branches: [ main ]
+    branches:
+      - main
+      - feature/new-dashboard
 
 permissions:
   contents: write
@@ -22,7 +24,7 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '20'
+        node-version: 20
 
     - name: Install Dependencies
       run: |
@@ -31,14 +33,23 @@ jobs:
         npm ci
 
     - name: Build
-      run: |
-        npm run build
+      run: npm run build
       env:
         CI: false
 
     - name: Deploy to GitHub Pages 🚀
-      if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/feature/new-dashboard'
+      if: success() && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/feature/new-dashboard')
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./build
+        user_name: github-actions[bot]
+        user_email: github-actions[bot]@users.noreply.github.com
+        commit_message: ${{ github.event.head_commit.message }}
+        full_commit_message: ${{ github.event.head_commit.message }}
+
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: build-files
+        path: build/
