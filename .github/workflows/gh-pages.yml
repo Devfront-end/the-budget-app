@@ -37,8 +37,3 @@ jobs:
           cd client
           npm ci
           npm run build
-
-      - name: Debug Jekyll Build
-        run: |
-          cd client
-          bundle exec jekyll build --trace
