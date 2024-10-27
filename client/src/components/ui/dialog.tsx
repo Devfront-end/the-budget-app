@@ -1,38 +1,24 @@
-// src/components/ui/dialog.tsx
-import React, { ReactNode } from 'react';
+import React from 'react';
 
 interface DialogProps {
+  isOpen: boolean;
   onClose: () => void;
-  children: ReactNode;
+  children: React.ReactNode;
 }
 
-export const Dialog: React.FC<DialogProps> = ({ onClose, children }) => (
-  <div className="dialog">
-    <div className="dialog-content">
-      {children}
-      <button onClick={onClose}>Close</button>
+const Dialog: React.FC<DialogProps> = ({ isOpen, onClose, children }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+      <div className="bg-white rounded-lg shadow-lg p-4">
+        <button onClick={onClose} className="absolute top-2 right-2">
+          &times;
+        </button>
+        {children}
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
-interface DialogChildrenProps {
-  children: ReactNode;
-}
-
-export const DialogHeader: React.FC<DialogChildrenProps> = ({ children }) => (
-  <div className="dialog-header">
-    {children}
-  </div>
-);
-
-export const DialogTitle: React.FC<DialogChildrenProps> = ({ children }) => (
-  <h2 className="dialog-title">
-    {children}
-  </h2>
-);
-
-export const DialogContent: React.FC<DialogChildrenProps> = ({ children }) => (
-  <div className="dialog-content">
-    {children}
-  </div>
-);
+export default Dialog;

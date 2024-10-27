@@ -1,19 +1,19 @@
 import React, { useState } from "react";
 import { Route, Routes, Link, Navigate } from "react-router-dom";
 import { Sun, Moon } from "lucide-react";
-import ExpensesChartPage from "./components/ExpensesChartPage";
-import BudgetSummary from "./components/BudgetSummary";
-import WishlistPage from "./components/WishlistPage";
-import Savings from "./components/Savings";
-import { LoginForm } from "./components/LoginForm";
-import SignUpForm from "./components/SignUpForm";
 import { FaUserCircle } from "react-icons/fa";
-import Modal from "./components/Modal";
+import ExpensesChartPage from "./components/ui/ExpensesChartPage";
+import BudgetSummary from "./components/ui/BudgetSummary";
+import WishlistPage from "./components/ui/WishlistPage";
+import Savings from "./components/ui/Savings";
+import { LoginForm } from "./components/ui/LoginForm";
+import SignUpForm from "./components/ui/SignUpForm";
+import Modal from "./components/ui/Modal";
 import csvIcon from "./assets/img/csv-icon.png";
 import googleSheetsIcon from "./assets/img/google-sheets-icon.png";
-import MySubscriptionsPage from "./components/MySubscriptionsPage";
-import MyIncomePage from "./components/MyIncomePage";
-import DashboardPage from "./components/DashboardPage"; // Import new components
+import MySubscriptionsPage from "./components/ui/MySubscriptionsPage";
+import MyIncomePage from "./components/ui/MyIncomePage";
+import DashboardPage from "./components/ui/DashboardPage"; // Import new components
 import { ExpenseItem } from "./types";
 
 interface AppProps {
@@ -207,24 +207,24 @@ const App: React.FC<AppProps> = ({
                           : "bg-gray-100 text-black"
                       }`}
                     />
-                    <button
-                      onClick={handleAddIncome}
-                      className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-                    >
-                      + Ajouter
-                    </button>
-                  </div>
-                  <div className="flex items-center space-x-2 mt-4">
-                    <button className="inline-block">
-                      <img src={csvIcon} alt="CSV Icon" className="w-6 h-6" />
-                    </button>
-                    <button className="inline-block">
-                      <img
-                        src={googleSheetsIcon}
-                        alt="Google Sheets Icon"
-                        className="w-6 h-6"
-                      />
-                    </button>
+                    <div className="flex items-center space-x-2">
+                      <button
+                        onClick={handleAddIncome}
+                        className="flex-1 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                      >
+                        + Ajouter
+                      </button>
+                      <button className="inline-block">
+                        <img src={csvIcon} alt="CSV Icon" className="w-6 h-6" />
+                      </button>
+                      <button className="inline-block">
+                        <img
+                          src={googleSheetsIcon}
+                          alt="Google Sheets Icon"
+                          className="w-6 h-6"
+                        />
+                      </button>
+                    </div>
                   </div>
                 </div>
                 {/* Expense Section */}
@@ -283,24 +283,24 @@ const App: React.FC<AppProps> = ({
                           : "bg-gray-100 text-black"
                       }`}
                     />
-                    <button
-                      onClick={handleAddExpense}
-                      className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
-                    >
-                      + Ajouter
-                    </button>
-                  </div>
-                  <div className="flex items-center space-x-2 mt-4">
-                    <button className="inline-block">
-                      <img src={csvIcon} alt="CSV Icon" className="w-6 h-6" />
-                    </button>
-                    <button className="inline-block">
-                      <img
-                        src={googleSheetsIcon}
-                        alt="Google Sheets Icon"
-                        className="w-6 h-6"
-                      />
-                    </button>
+                    <div className="flex items-center space-x-2">
+                      <button
+                        onClick={handleAddExpense}
+                        className="flex-1 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+                      >
+                        + Ajouter
+                      </button>
+                      <button className="inline-block">
+                        <img src={csvIcon} alt="CSV Icon" className="w-6 h-6" />
+                      </button>
+                      <button className="inline-block">
+                        <img
+                          src={googleSheetsIcon}
+                          alt="Google Sheets Icon"
+                          className="w-6 h-6"
+                        />
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>

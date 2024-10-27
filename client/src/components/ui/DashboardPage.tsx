@@ -1,5 +1,5 @@
-import React from 'react';
-import { ExpenseItem } from '../types';  // Import your types if needed
+import React from "react";
+import { ExpenseItem } from "../../types"; // Import your types if needed
 
 interface DashboardPageProps {
   income: ExpenseItem[];
@@ -25,7 +25,9 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ income, expenses }) => {
         </div>
         <div className="bg-blue-100 p-4 rounded-lg shadow col-span-2">
           <h2 className="text-xl font-semibold mb-2">Balance</h2>
-          <p className={`text-2xl font-bold ${balance >= 0 ? 'text-blue-600' : 'text-red-600'}`}>
+          <p
+            className={`text-2xl font-bold ${balance >= 0 ? "text-blue-600" : "text-red-600"}`}
+          >
             {balance} €
           </p>
         </div>

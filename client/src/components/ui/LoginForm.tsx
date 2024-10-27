@@ -1,6 +1,6 @@
 import React from 'react';
-import facebookLogo from '../assets/img/512px-Facebook_Logo_2023.png';
-import googleLogo from '../assets/img/GMail New Icon.svg';
+import facebookLogo from '../../assets/img/512px-Facebook_Logo_2023.png';
+import googleLogo from '../../assets/img/GMail New Icon.svg';
 
 interface LoginFormProps {
   onSwitchForm: () => void;
