@@ -1,10 +1,13 @@
 source 'https://rubygems.org'
 
-# Use GitHub Pages' compatible version of Jekyll and plugins
-gem 'github-pages', group: :jekyll_plugins
-
-# Optional theme; adjust this line if you’re using a different theme
+gem 'jekyll', '~> 4.2.0'
 gem 'jekyll-theme-primer'
-
-# GitHub Flavored Markdown parser
+gem 'jekyll-seo-tag'
+gem 'jekyll-github-metadata'
+gem 'jekyll-paginate'
+gem 'jekyll-relative-links'
+gem 'jekyll-optional-front-matter'
+gem 'jekyll-readme-index'
+gem 'jekyll-default-layout'
+gem 'jekyll-titles-from-headings'
 gem 'kramdown-parser-gfm'

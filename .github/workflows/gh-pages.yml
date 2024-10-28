@@ -1,59 +1,33 @@
-name: Build and Deploy
+name: GitHub Pages Custom Jekyll Build
 
 on:
   push:
     branches:
-      - main
-      - new-feature  # Add the branch you are working on
-
-permissions:
-  contents: write
+      - latest-version-2  # or your branch name
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout the repository code
-      - name: Checkout 🛎️
-        uses: actions/checkout@v4
+      - name: Check out the code
+        uses: actions/checkout@v2
 
-      # Step 2: Set up Node.js environment (Node.js 20)
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
         with:
-          node-version: '20'  # Explicitly set Node.js 20
+          ruby-version: '2.7'  # or the specific version you need
+          bundler-cache: true
 
-      # Step 3: Cache node modules for faster builds
-      - name: Cache node modules 📦
-        uses: actions/cache@v3
-        with:
-          path: client/node_modules
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('client/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-modules-
-
-      # Step 4: Install dependencies and build the project
-      - name: Install and Build 🔧
+      - name: Install dependencies
         run: |
-          cd client
-          npm ci  # Install dependencies
-          npm run build  # Build the project
+          bundle install
 
-      # Step 5: Disable Jekyll on GitHub Pages by creating .nojekyll file
-      - name: Disable Jekyll on GitHub Pages
-        run: |
-          touch client/build/.nojekyll
+      - name: Build the Jekyll site
+        run: bundle exec jekyll build
 
-      # Step 6: Deploy to GitHub Pages
-      - name: Deploy to GitHub Pages 🚀
+      - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./client/build
-
-      # Step 7: Debug Jekyll Build
-      - name: Debug Jekyll Build
-        run: |
-          cd client
-          bundle exec jekyll build --trace
+          publish_dir: ./_site
