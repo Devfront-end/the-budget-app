@@ -3,7 +3,7 @@ name: GitHub Pages Custom Jekyll Build
 on:
   push:
     branches:
-      - latest-version-2  # or your branch name
+      - latest-version-2
 
 jobs:
   build:
@@ -11,17 +11,21 @@ jobs:
 
     steps:
       - name: Check out the code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3  # Updated to v3 for Node.js compatibility
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '2.7'  # or the specific version you need
+          ruby-version: '2.7'
           bundler-cache: true
 
-      - name: Install dependencies
+      - name: Clear Bundler cache
         run: |
-          bundle install
+          rm -rf vendor/bundle
+          bundle config set --local path 'vendor/bundle'
+
+      - name: Install dependencies
+        run: bundle install
 
       - name: Build the Jekyll site
         run: bundle exec jekyll build
