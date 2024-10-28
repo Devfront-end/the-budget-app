@@ -1,0 +1,1 @@
+{"root":["./src/app.ts","./src/email.ts","./src/server.ts","./src/config/db.ts","./src/controllers/emailcontroller.ts","./src/controllers/expensecontroller.ts","./src/controllers/incomecontroller.ts","./src/models/expense.ts","./src/models/income.ts","./src/routes/expenseroutes.ts","./src/routes/incomeroutes.ts","./src/routes/signuproute.ts"],"errors":true,"version":"5.6.2"}
