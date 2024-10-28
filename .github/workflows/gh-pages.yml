@@ -1,8 +1,9 @@
-name: GitHub Pages Custom Jekyll Build
+name: Build and Deploy Jekyll Site
 
 on:
   push:
     branches:
+      - main
       - latest-version-2
 
 jobs:
@@ -10,8 +11,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check out the code
-        uses: actions/checkout@v3  # Updated to v3 for Node.js compatibility
+      - name: Checkout 🛎️
+        uses: actions/checkout@v4
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
@@ -19,13 +20,18 @@ jobs:
           ruby-version: '2.7'
           bundler-cache: true
 
-      - name: Clear Bundler cache
+      - name: Install Bundler 1.x
+        run: gem install bundler -v '~>1.17'
+
+      - name: Clear Bundler and Gem caches
         run: |
           rm -rf vendor/bundle
+          rm -rf ~/.bundle/cache
+          rm -rf ~/.gem/cache
           bundle config set --local path 'vendor/bundle'
 
-      - name: Install dependencies
-        run: bundle install
+      - name: Install dependencies with force
+        run: bundle install --jobs 4 --force
 
       - name: Build the Jekyll site
         run: bundle exec jekyll build
