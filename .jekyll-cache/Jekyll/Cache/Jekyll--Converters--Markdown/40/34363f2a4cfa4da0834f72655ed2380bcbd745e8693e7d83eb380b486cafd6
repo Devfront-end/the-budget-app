@@ -1,0 +1,38 @@
+I"2
+<blockquote>
+  <p>🛑 This file is source code, not the primary documentation location! 🛑</p>
+
+  <p>See <strong>https://typescript-eslint.io/rules/await-thenable</strong> for documentation.</p>
+</blockquote>
+
+<p>A “Thenable” value is an object which has a <code class="language-plaintext highlighter-rouge">then</code> method, such as a Promise.
+The <code class="language-plaintext highlighter-rouge">await</code> keyword is generally used to retrieve the result of calling a Thenable’s <code class="language-plaintext highlighter-rouge">then</code> method.</p>
+
+<p>If the <code class="language-plaintext highlighter-rouge">await</code> keyword is used on a value that is not a Thenable, the value is directly resolved immediately.
+While doing so is valid JavaScript, it is often a programmer error, such as forgetting to add parenthesis to call a function that returns a Promise.</p>
+
+<h2 id="examples">Examples</h2>
+
+<!--tabs-->
+
+<h3 id="-incorrect">❌ Incorrect</h3>
+
+<div class="language-ts highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">await</span> <span class="dl">'</span><span class="s1">value</span><span class="dl">'</span><span class="p">;</span>
+
+<span class="kd">const</span> <span class="nx">createValue</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="dl">'</span><span class="s1">value</span><span class="dl">'</span><span class="p">;</span>
+<span class="k">await</span> <span class="nx">createValue</span><span class="p">();</span>
+</code></pre></div></div>
+
+<h3 id="-correct">✅ Correct</h3>
+
+<div class="language-ts highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">await</span> <span class="nb">Promise</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="dl">'</span><span class="s1">value</span><span class="dl">'</span><span class="p">);</span>
+
+<span class="kd">const</span> <span class="nx">createValue</span> <span class="o">=</span> <span class="k">async</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="dl">'</span><span class="s1">value</span><span class="dl">'</span><span class="p">;</span>
+<span class="k">await</span> <span class="nx">createValue</span><span class="p">();</span>
+</code></pre></div></div>
+
+<h2 id="when-not-to-use-it">When Not To Use It</h2>
+
+<p>If you want to allow code to <code class="language-plaintext highlighter-rouge">await</code> non-Promise values.
+This is generally not preferred, but can sometimes be useful for visual consistency.</p>
+:ET

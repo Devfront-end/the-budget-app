@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Route, Routes, Link, Navigate } from "react-router-dom";
 import { Sun, Moon } from "lucide-react";
-import { FaUserCircle } from "react-icons/fa";
+import { FaUserCircle, FaMoneyBillWave, FaStar, FaRegSmile, FaLaptopCode, FaChartLine, FaHandshake, FaHome, FaShoppingCart, FaBus, FaMusic, FaHeartbeat } from "react-icons/fa";
 import ExpensesChartPage from "./components/ui/ExpensesChartPage";
 import BudgetSummary from "./components/ui/BudgetSummary";
 import WishlistPage from "./components/ui/WishlistPage";
@@ -13,7 +13,7 @@ import csvIcon from "./assets/img/csv-icon.png";
 import googleSheetsIcon from "./assets/img/google-sheets-icon.png";
 import MySubscriptionsPage from "./components/ui/MySubscriptionsPage";
 import MyIncomePage from "./components/ui/MyIncomePage";
-import DashboardPage from "./components/ui/DashboardPage"; // Import new components
+import DashboardPage from "./components/ui/DashboardPage";
 import { ExpenseItem } from "./types";
 
 interface AppProps {
@@ -25,33 +25,27 @@ const App: React.FC<AppProps> = ({
   expenses: initialExpenses,
   isDarkTheme: initialIsDarkTheme,
 }) => {
-  const [incomeCategories] = useState<string[]>([
-    "Salaire net",
-    "Primes",
-    "Prime d'activité",
-    "Freelance",
-    "Investissements",
-    "ARE",
+  const [incomeCategories] = useState<{ name: string; icon: JSX.Element }[]>([
+    { name: "Salaire net", icon: <FaMoneyBillWave /> },
+    { name: "Primes", icon: <FaStar /> },
+    { name: "Prime d'activité", icon: <FaRegSmile /> },
+    { name: "Freelance", icon: <FaLaptopCode /> },
+    { name: "Investissements", icon: <FaChartLine /> },
+    { name: "ARE", icon: <FaHandshake /> },
   ]);
-  const [expenseCategories] = useState<string[]>([
-    "Loyer",
-    "Courses",
-    "Transport",
-    "Loisirs",
-    "Santé",
+
+  const [expenseCategories] = useState<{ name: string; icon: JSX.Element }[]>([
+    { name: "Loyer", icon: <FaHome /> },
+    { name: "Courses", icon: <FaShoppingCart /> },
+    { name: "Transport", icon: <FaBus /> },
+    { name: "Loisirs", icon: <FaMusic /> },
+    { name: "Santé", icon: <FaHeartbeat /> },
   ]);
+
   const [income, setIncome] = useState<ExpenseItem[]>([]);
   const [expenses, setExpenses] = useState<ExpenseItem[]>(initialExpenses);
-  const [newIncome, setNewIncome] = useState<{
-    description: string;
-    amount: string;
-    date: string;
-  }>({ description: "", amount: "", date: "" });
-  const [newExpense, setNewExpense] = useState<{
-    description: string;
-    amount: string;
-    date: string;
-  }>({ description: "", amount: "", date: "" });
+  const [newIncome, setNewIncome] = useState<{ description: string; amount: string; date: string }>({ description: "", amount: "", date: "" });
+  const [newExpense, setNewExpense] = useState<{ description: string; amount: string; date: string }>({ description: "", amount: "", date: "" });
   const [isDarkTheme, setIsDarkTheme] = useState<boolean>(initialIsDarkTheme);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [isLogin, setIsLogin] = useState(true);
@@ -107,37 +101,17 @@ const App: React.FC<AppProps> = ({
       <header className="bg-indigo-600 text-white p-4 flex justify-between items-center">
         <h1 className="text-2xl font-bold">Budget App</h1>
         <nav>
-          <Link to="/" className="mr-4">
-            Home
-          </Link>
-          <Link to="/expenses-chart" className="mr-4">
-            Expenses
-          </Link>
-          <Link to="/wishlist" className="mr-4">
-            Wishlist
-          </Link>
-          <Link to="/savings" className="mr-4">
-            Savings
-          </Link>
-          <Link to="/subscriptions" className="mr-4">
-            My Subscriptions
-          </Link>
-          <Link to="/income" className="mr-4">
-            My Income
-          </Link>
-          <Link to="/dashboard" className="mr-4">
-            Dashboard
-          </Link>
+          <Link to="/" className="mr-4">Home</Link>
+          <Link to="/expenses-chart" className="mr-4">Expenses</Link>
+          <Link to="/wishlist" className="mr-4">Wishlist</Link>
+          <Link to="/savings" className="mr-4">Savings</Link>
+          <Link to="/subscriptions" className="mr-4">My Subscriptions</Link>
+          <Link to="/income" className="mr-4">My Income</Link>
+          <Link to="/dashboard" className="mr-4">Dashboard</Link>
         </nav>
         <div className="flex items-center">
-          <FaUserCircle
-            size={24}
-            className="mr-2 cursor-pointer"
-            onClick={toggleAuthModal}
-          />
-          <span className="cursor-pointer" onClick={toggleAuthModal}>
-            Connect
-          </span>
+          <FaUserCircle size={24} className="mr-2 cursor-pointer" onClick={toggleAuthModal} />
+          <span className="cursor-pointer" onClick={toggleAuthModal}>Connect</span>
         </div>
         {isDarkTheme ? (
           <Sun className="cursor-pointer" onClick={toggleTheme} />
@@ -157,9 +131,7 @@ const App: React.FC<AppProps> = ({
                     isDarkTheme ? "bg-gray-800" : "bg-gray-200"
                   }`}
                 >
-                  <h2 className="text-xl font-semibold mb-4">
-                    Entrées d'argent
-                  </h2>
+                  <h2 className="text-xl font-semibold mb-4">Entrées d'argent</h2>
                   <div className="flex flex-col space-y-2">
                     <select
                       value={newIncome.description}
@@ -177,8 +149,8 @@ const App: React.FC<AppProps> = ({
                     >
                       <option value="">Sélectionner une catégorie</option>
                       {incomeCategories.map((category, index) => (
-                        <option key={index} value={category}>
-                          {category}
+                        <option key={index} value={category.name}>
+                          {category.icon} {category.name}
                         </option>
                       ))}
                     </select>
@@ -218,11 +190,7 @@ const App: React.FC<AppProps> = ({
                         <img src={csvIcon} alt="CSV Icon" className="w-6 h-6" />
                       </button>
                       <button className="inline-block">
-                        <img
-                          src={googleSheetsIcon}
-                          alt="Google Sheets Icon"
-                          className="w-6 h-6"
-                        />
+                        <img src={googleSheetsIcon} alt="Google Sheets Icon" className="w-6 h-6" />
                       </button>
                     </div>
                   </div>
@@ -233,9 +201,7 @@ const App: React.FC<AppProps> = ({
                     isDarkTheme ? "bg-gray-800" : "bg-gray-200"
                   }`}
                 >
-                  <h2 className="text-xl font-semibold mb-4">
-                    Ajouter une dépense
-                  </h2>
+                  <h2 className="text-xl font-semibold mb-4">Ajouter une dépense</h2>
                   <div className="flex flex-col space-y-2">
                     <select
                       value={newExpense.description}
@@ -253,8 +219,8 @@ const App: React.FC<AppProps> = ({
                     >
                       <option value="">Sélectionner une catégorie</option>
                       {expenseCategories.map((category, index) => (
-                        <option key={index} value={category}>
-                          {category}
+                        <option key={index} value={category.name}>
+                          {category.icon} {category.name}
                         </option>
                       ))}
                     </select>
@@ -294,30 +260,21 @@ const App: React.FC<AppProps> = ({
                         <img src={csvIcon} alt="CSV Icon" className="w-6 h-6" />
                       </button>
                       <button className="inline-block">
-                        <img
-                          src={googleSheetsIcon}
-                          alt="Google Sheets Icon"
-                          className="w-6 h-6"
-                        />
+                        <img src={googleSheetsIcon} alt="Google Sheets Icon" className="w-6 h-6" />
                       </button>
                     </div>
                   </div>
                 </div>
               </div>
               <div className="container mx-auto mt-8">
-                <BudgetSummary
-                  totalIncome={totalIncome}
-                  totalExpenses={totalExpenses}
-                />
+                <BudgetSummary totalIncome={totalIncome} totalExpenses={totalExpenses} />
               </div>
             </main>
           }
         />
         <Route
           path="/expenses-chart"
-          element={
-            <ExpensesChartPage expenses={expenses} isDarkTheme={isDarkTheme} />
-          }
+          element={<ExpensesChartPage expenses={expenses} isDarkTheme={isDarkTheme} />}
         />
         <Route path="/wishlist" element={<WishlistPage />} />
         <Route path="/savings" element={<Savings balance={balance} />} />

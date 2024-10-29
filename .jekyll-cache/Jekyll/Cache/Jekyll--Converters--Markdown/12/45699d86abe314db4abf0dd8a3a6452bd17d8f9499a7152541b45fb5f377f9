@@ -1,0 +1,76 @@
+I"�<blockquote>
+  <p>🛑 This file is source code, not the primary documentation location! 🛑</p>
+
+  <p>See <strong>https://typescript-eslint.io/rules/consistent-indexed-object-style</strong> for documentation.</p>
+</blockquote>
+
+<p>TypeScript supports defining arbitrary object keys using an index signature. TypeScript also has a builtin type named <code class="language-plaintext highlighter-rouge">Record</code> to create an empty object defining only an index signature. For example, the following types are equal:</p>
+
+<div class="language-ts highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">interface</span> <span class="nx">Foo</span> <span class="p">{</span>
+  <span class="p">[</span><span class="nx">key</span><span class="p">:</span> <span class="kr">string</span><span class="p">]:</span> <span class="nx">unknown</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">type</span> <span class="nx">Foo</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="p">[</span><span class="na">key</span><span class="p">:</span> <span class="kr">string</span><span class="p">]:</span> <span class="nx">unknown</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="kd">type</span> <span class="nx">Foo</span> <span class="o">=</span> <span class="nb">Record</span><span class="o">&lt;</span><span class="kr">string</span><span class="p">,</span> <span class="nx">unknown</span><span class="o">&gt;</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>Keeping to one declaration form consistently improve code readability.</p>
+
+<h2 id="options">Options</h2>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">"record"</code> <em>(default)</em>: only allow the <code class="language-plaintext highlighter-rouge">Record</code> type.</li>
+  <li><code class="language-plaintext highlighter-rouge">"index-signature"</code>: only allow index signatures.</li>
+</ul>
+
+<h3 id="record"><code class="language-plaintext highlighter-rouge">record</code></h3>
+
+<!--tabs-->
+
+<h4 id="-incorrect">❌ Incorrect</h4>
+
+<div class="language-ts highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/* eslint @typescript-eslint/consistent-indexed-object-style: ["error", "record"] */</span>
+
+<span class="kr">interface</span> <span class="nx">Foo</span> <span class="p">{</span>
+  <span class="p">[</span><span class="nx">key</span><span class="p">:</span> <span class="kr">string</span><span class="p">]:</span> <span class="nx">unknown</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">type</span> <span class="nx">Foo</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="p">[</span><span class="na">key</span><span class="p">:</span> <span class="kr">string</span><span class="p">]:</span> <span class="nx">unknown</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<h4 id="-correct">✅ Correct</h4>
+
+<div class="language-ts highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/* eslint @typescript-eslint/consistent-indexed-object-style: ["error", "record"] */</span>
+
+<span class="kd">type</span> <span class="nx">Foo</span> <span class="o">=</span> <span class="nb">Record</span><span class="o">&lt;</span><span class="kr">string</span><span class="p">,</span> <span class="nx">unknown</span><span class="o">&gt;</span><span class="p">;</span>
+</code></pre></div></div>
+
+<h3 id="index-signature"><code class="language-plaintext highlighter-rouge">index-signature</code></h3>
+
+<!--tabs-->
+
+<h4 id="-incorrect-1">❌ Incorrect</h4>
+
+<div class="language-ts highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/* eslint @typescript-eslint/consistent-indexed-object-style: ["error", "index-signature"] */</span>
+
+<span class="kd">type</span> <span class="nx">Foo</span> <span class="o">=</span> <span class="nb">Record</span><span class="o">&lt;</span><span class="kr">string</span><span class="p">,</span> <span class="nx">unknown</span><span class="o">&gt;</span><span class="p">;</span>
+</code></pre></div></div>
+
+<h4 id="-correct-1">✅ Correct</h4>
+
+<div class="language-ts highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/* eslint @typescript-eslint/consistent-indexed-object-style: ["error", "index-signature"] */</span>
+
+<span class="kr">interface</span> <span class="nx">Foo</span> <span class="p">{</span>
+  <span class="p">[</span><span class="nx">key</span><span class="p">:</span> <span class="kr">string</span><span class="p">]:</span> <span class="nx">unknown</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">type</span> <span class="nx">Foo</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="p">[</span><span class="na">key</span><span class="p">:</span> <span class="kr">string</span><span class="p">]:</span> <span class="nx">unknown</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div></div>
+:ET

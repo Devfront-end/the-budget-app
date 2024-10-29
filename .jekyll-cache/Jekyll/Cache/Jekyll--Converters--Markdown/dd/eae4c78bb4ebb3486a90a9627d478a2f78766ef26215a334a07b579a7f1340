@@ -1,0 +1,38 @@
+I"<blockquote>
+  <p>🛑 This file is source code, not the primary documentation location! 🛑</p>
+
+  <p>See <strong>https://typescript-eslint.io/rules/ban-tslint-comment</strong> for documentation.</p>
+</blockquote>
+
+<p>Useful when migrating from TSLint to ESLint. Once TSLint has been removed, this rule helps locate TSLint annotations (e.g. <code class="language-plaintext highlighter-rouge">// tslint:disable</code>).</p>
+
+<blockquote>
+  <p>See the <a href="https://palantir.github.io/tslint/usage/rule-flags">TSLint rule flags docs</a> for reference.</p>
+</blockquote>
+
+<h2 id="examples">Examples</h2>
+
+<!--tabs-->
+
+<h3 id="-incorrect">❌ Incorrect</h3>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/* tslint:disable */</span>
+<span class="cm">/* tslint:enable */</span>
+<span class="cm">/* tslint:disable:rule1 rule2 rule3... */</span>
+<span class="cm">/* tslint:enable:rule1 rule2 rule3... */</span>
+<span class="c1">// tslint:disable-next-line</span>
+<span class="nx">someCode</span><span class="p">();</span> <span class="c1">// tslint:disable-line</span>
+<span class="c1">// tslint:disable-next-line:rule1 rule2 rule3...</span>
+</code></pre></div></div>
+
+<h3 id="-correct">✅ Correct</h3>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// This is a comment that just happens to mention tslint</span>
+<span class="cm">/* This is a multiline comment that just happens to mention tslint */</span>
+<span class="nx">someCode</span><span class="p">();</span> <span class="c1">// This is a comment that just happens to mention tslint</span>
+</code></pre></div></div>
+
+<h2 id="when-not-to-use-it">When Not To Use It</h2>
+
+<p>If you are still using TSLint.</p>
+:ET

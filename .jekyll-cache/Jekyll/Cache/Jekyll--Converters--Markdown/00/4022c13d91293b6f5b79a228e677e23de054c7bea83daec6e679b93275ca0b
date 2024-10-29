@@ -1,0 +1,17 @@
+I"z<p><code class="language-plaintext highlighter-rouge">@typescript-eslint/eslint-plugin</code> includes over 100 rules that detect best practice violations, bugs, and/or stylistic issues specifically for TypeScript code.
+See <a href="/linting/configs">Configs</a> for how to enable recommended rules using configs.</p>
+
+<h2 id="supported-rules">Supported Rules</h2>
+
+<p>import RulesTable from “@site/src/components/RulesTable”;</p>
+
+<RulesTable ruleset="supported-rules" />
+
+<h2 id="extension-rules">Extension Rules</h2>
+
+<p>In some cases, ESLint provides a rule itself, but it doesn’t support TypeScript syntax; either it crashes, or it ignores the syntax, or it falsely reports against it.
+In these cases, we create what we call an extension rule; a rule within our plugin that has the same functionality, but also supports TypeScript.</p>
+
+<RulesTable ruleset="extension-rules" />
+
+:ET

@@ -1,0 +1,109 @@
+I"" <blockquote>
+  <p>🛑 This file is source code, not the primary documentation location! 🛑</p>
+
+  <p>See <strong>https://typescript-eslint.io/rules/class-literal-property-style</strong> for documentation.</p>
+</blockquote>
+
+<p>Some TypeScript applications store literal values on classes using fields with the <code class="language-plaintext highlighter-rouge">readonly</code> modifier to prevent them from being reassigned.
+When writing TypeScript libraries that could be used by JavaScript users, however, it’s typically safer to expose these literals using <code class="language-plaintext highlighter-rouge">getter</code>s, since the <code class="language-plaintext highlighter-rouge">readonly</code> modifier is enforced at compile type.</p>
+
+<p>This rule aims to ensure that literals exposed by classes are done so consistently, in one of the two style described above.
+By default this rule prefers the <code class="language-plaintext highlighter-rouge">fields</code> style as it means JS doesn’t have to setup &amp; teardown a function closure.</p>
+
+<h2 id="options">Options</h2>
+
+<p>:::note</p>
+
+<p>This rule only checks for constant <em>literal</em> values (string, template string, number, bigint, boolean, regexp, null). It does not check objects or arrays, because a readonly field behaves differently to a getter in those cases. It also does not check functions, as it is a common pattern to use readonly fields with arrow function values as auto-bound methods.
+This is because these types can be mutated and carry with them more complex implications about their usage.</p>
+
+<p>:::</p>
+
+<h3 id="fields"><code class="language-plaintext highlighter-rouge">"fields"</code></h3>
+
+<p>This style checks for any getter methods that return literal values, and requires them to be defined using fields with the <code class="language-plaintext highlighter-rouge">readonly</code> modifier instead.</p>
+
+<p>Examples of code with the <code class="language-plaintext highlighter-rouge">fields</code> style:</p>
+
+<!--tabs-->
+
+<h4 id="-incorrect">❌ Incorrect</h4>
+
+<div class="language-ts highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/* eslint @typescript-eslint/class-literal-property-style: ["error", "fields"] */</span>
+
+<span class="kd">class</span> <span class="nx">Mx</span> <span class="p">{</span>
+  <span class="k">public</span> <span class="k">static</span> <span class="kd">get</span> <span class="nx">myField1</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="k">private</span> <span class="kd">get</span> <span class="p">[</span><span class="dl">'</span><span class="s1">myField2</span><span class="dl">'</span><span class="p">]()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="dl">'</span><span class="s1">hello world</span><span class="dl">'</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h4 id="-correct">✅ Correct</h4>
+
+<div class="language-ts highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/* eslint @typescript-eslint/class-literal-property-style: ["error", "fields"] */</span>
+
+<span class="kd">class</span> <span class="nx">Mx</span> <span class="p">{</span>
+  <span class="k">public</span> <span class="k">readonly</span> <span class="nx">myField1</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+
+  <span class="c1">// not a literal</span>
+  <span class="k">public</span> <span class="k">readonly</span> <span class="nx">myField2</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">];</span>
+
+  <span class="k">private</span> <span class="k">readonly</span> <span class="p">[</span><span class="dl">'</span><span class="s1">myField3</span><span class="dl">'</span><span class="p">]</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">hello world</span><span class="dl">'</span><span class="p">;</span>
+
+  <span class="k">public</span> <span class="kd">get</span> <span class="nx">myField4</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="s2">`hello from </span><span class="p">${</span><span class="nb">window</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">href</span><span class="p">}</span><span class="s2">`</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="getters"><code class="language-plaintext highlighter-rouge">"getters"</code></h3>
+
+<p>This style checks for any <code class="language-plaintext highlighter-rouge">readonly</code> fields that are assigned literal values, and requires them to be defined as getters instead.
+This style pairs well with the <a href="prefer-readonly.md"><code class="language-plaintext highlighter-rouge">@typescript-eslint/prefer-readonly</code></a> rule,
+as it will identify fields that can be <code class="language-plaintext highlighter-rouge">readonly</code>, and thus should be made into getters.</p>
+
+<p>Examples of code with the <code class="language-plaintext highlighter-rouge">getters</code> style:</p>
+
+<!--tabs-->
+
+<h4 id="-incorrect-1">❌ Incorrect</h4>
+
+<div class="language-ts highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/* eslint @typescript-eslint/class-literal-property-style: ["error", "getters"] */</span>
+
+<span class="kd">class</span> <span class="nx">Mx</span> <span class="p">{</span>
+  <span class="k">readonly</span> <span class="nx">myField1</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+  <span class="k">readonly</span> <span class="nx">myField2</span> <span class="o">=</span> <span class="s2">`hello world`</span><span class="p">;</span>
+  <span class="k">private</span> <span class="k">readonly</span> <span class="nx">myField3</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">hello world</span><span class="dl">'</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h4 id="-correct-1">✅ Correct</h4>
+
+<div class="language-ts highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/* eslint @typescript-eslint/class-literal-property-style: ["error", "getters"] */</span>
+
+<span class="kd">class</span> <span class="nx">Mx</span> <span class="p">{</span>
+  <span class="c1">// no readonly modifier</span>
+  <span class="k">public</span> <span class="nx">myField1</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">hello</span><span class="dl">'</span><span class="p">;</span>
+
+  <span class="c1">// not a literal</span>
+  <span class="k">public</span> <span class="k">readonly</span> <span class="nx">myField2</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">];</span>
+
+  <span class="k">public</span> <span class="k">static</span> <span class="kd">get</span> <span class="nx">myField3</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="k">private</span> <span class="kd">get</span> <span class="p">[</span><span class="dl">'</span><span class="s1">myField4</span><span class="dl">'</span><span class="p">]()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="dl">'</span><span class="s1">hello world</span><span class="dl">'</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="when-not-to-use-it">When Not To Use It</h2>
+
+<p>When you have no strong preference, or do not wish to enforce a particular style
+for how literal values are exposed by your classes.</p>
+:ET

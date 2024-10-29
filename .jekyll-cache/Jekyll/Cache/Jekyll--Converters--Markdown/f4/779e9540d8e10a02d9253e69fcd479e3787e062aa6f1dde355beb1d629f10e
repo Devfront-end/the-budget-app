@@ -1,0 +1,71 @@
+I"O<blockquote>
+  <p>🛑 This file is source code, not the primary documentation location! 🛑</p>
+
+  <p>See <strong>https://typescript-eslint.io/rules/consistent-generic-constructors</strong> for documentation.</p>
+</blockquote>
+
+<p>When constructing a generic class, you can specify the type arguments on either the left-hand side (as a type annotation) or the right-hand side (as part of the constructor call):</p>
+
+<div class="language-ts highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Left-hand side</span>
+<span class="kd">const</span> <span class="nx">map</span><span class="p">:</span> <span class="nb">Map</span><span class="o">&lt;</span><span class="kr">string</span><span class="p">,</span> <span class="kr">number</span><span class="o">&gt;</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Map</span><span class="p">();</span>
+
+<span class="c1">// Right-hand side</span>
+<span class="kd">const</span> <span class="nx">map</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Map</span><span class="o">&lt;</span><span class="kr">string</span><span class="p">,</span> <span class="kr">number</span><span class="o">&gt;</span><span class="p">();</span>
+</code></pre></div></div>
+
+<p>This rule ensures that type arguments appear consistently on one side of the declaration.
+Keeping to one side consistently improve code readability.</p>
+
+<blockquote>
+  <p>The rule never reports when there are type parameters on both sides, or neither sides of the declaration.
+It also doesn’t report if the names of the type annotation and the constructor don’t match.</p>
+</blockquote>
+
+<h2 id="options">Options</h2>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">constructor</code> <em>(default)</em>: type arguments that <strong>only</strong> appear on the type annotation are disallowed.</li>
+  <li><code class="language-plaintext highlighter-rouge">type-annotation</code>: type arguments that <strong>only</strong> appear on the constructor are disallowed.</li>
+</ul>
+
+<h3 id="constructor"><code class="language-plaintext highlighter-rouge">constructor</code></h3>
+
+<!--tabs-->
+
+<h4 id="-incorrect">❌ Incorrect</h4>
+
+<div class="language-ts highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">map</span><span class="p">:</span> <span class="nb">Map</span><span class="o">&lt;</span><span class="kr">string</span><span class="p">,</span> <span class="kr">number</span><span class="o">&gt;</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Map</span><span class="p">();</span>
+<span class="kd">const</span> <span class="kd">set</span><span class="p">:</span> <span class="nb">Set</span><span class="o">&lt;</span><span class="kr">string</span><span class="o">&gt;</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Set</span><span class="p">();</span>
+</code></pre></div></div>
+
+<h4 id="-correct">✅ Correct</h4>
+
+<div class="language-ts highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">map</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Map</span><span class="o">&lt;</span><span class="kr">string</span><span class="p">,</span> <span class="kr">number</span><span class="o">&gt;</span><span class="p">();</span>
+<span class="kd">const</span> <span class="nx">map</span><span class="p">:</span> <span class="nb">Map</span><span class="o">&lt;</span><span class="kr">string</span><span class="p">,</span> <span class="kr">number</span><span class="o">&gt;</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">MyMap</span><span class="p">();</span>
+<span class="kd">const</span> <span class="kd">set</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Set</span><span class="o">&lt;</span><span class="kr">string</span><span class="o">&gt;</span><span class="p">();</span>
+<span class="kd">const</span> <span class="kd">set</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Set</span><span class="p">();</span>
+<span class="kd">const</span> <span class="kd">set</span><span class="p">:</span> <span class="nb">Set</span><span class="o">&lt;</span><span class="kr">string</span><span class="o">&gt;</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Set</span><span class="o">&lt;</span><span class="kr">string</span><span class="o">&gt;</span><span class="p">();</span>
+</code></pre></div></div>
+
+<h3 id="type-annotation"><code class="language-plaintext highlighter-rouge">type-annotation</code></h3>
+
+<!--tabs-->
+
+<h4 id="-incorrect-1">❌ Incorrect</h4>
+
+<div class="language-ts highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">map</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Map</span><span class="o">&lt;</span><span class="kr">string</span><span class="p">,</span> <span class="kr">number</span><span class="o">&gt;</span><span class="p">();</span>
+<span class="kd">const</span> <span class="kd">set</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Set</span><span class="o">&lt;</span><span class="kr">string</span><span class="o">&gt;</span><span class="p">();</span>
+</code></pre></div></div>
+
+<h4 id="-correct-1">✅ Correct</h4>
+
+<div class="language-ts highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">map</span><span class="p">:</span> <span class="nb">Map</span><span class="o">&lt;</span><span class="kr">string</span><span class="p">,</span> <span class="kr">number</span><span class="o">&gt;</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Map</span><span class="p">();</span>
+<span class="kd">const</span> <span class="kd">set</span><span class="p">:</span> <span class="nb">Set</span><span class="o">&lt;</span><span class="kr">string</span><span class="o">&gt;</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Set</span><span class="p">();</span>
+<span class="kd">const</span> <span class="kd">set</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Set</span><span class="p">();</span>
+<span class="kd">const</span> <span class="kd">set</span><span class="p">:</span> <span class="nb">Set</span><span class="o">&lt;</span><span class="kr">string</span><span class="o">&gt;</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Set</span><span class="o">&lt;</span><span class="kr">string</span><span class="o">&gt;</span><span class="p">();</span>
+</code></pre></div></div>
+
+<h2 id="when-not-to-use-it">When Not To Use It</h2>
+
+<p>You can turn this rule off if you don’t want to enforce one kind of generic constructor style over the other.</p>
+:ET

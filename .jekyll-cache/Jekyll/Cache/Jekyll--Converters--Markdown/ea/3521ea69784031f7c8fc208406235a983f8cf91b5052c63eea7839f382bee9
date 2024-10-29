@@ -1,0 +1,192 @@
+I"(H<blockquote>
+  <p>🛑 This file is source code, not the primary documentation location! 🛑</p>
+
+  <p>See <strong>https://typescript-eslint.io/rules/array-type</strong> for documentation.</p>
+</blockquote>
+
+<p>TypeScript provides two equivalent ways to define an array type: <code class="language-plaintext highlighter-rouge">T[]</code> and <code class="language-plaintext highlighter-rouge">Array&lt;T&gt;</code>.
+The two styles are functionally equivalent.
+Using the same style consistently across your codebase makes it easier for developers to read and understand array types.</p>
+
+<h2 id="options">Options</h2>
+
+<p>The default config will enforce that all mutable and readonly arrays use the <code class="language-plaintext highlighter-rouge">'array'</code> syntax.</p>
+
+<h3 id="array"><code class="language-plaintext highlighter-rouge">"array"</code></h3>
+
+<p>Always use <code class="language-plaintext highlighter-rouge">T[]</code> or <code class="language-plaintext highlighter-rouge">readonly T[]</code> for all array types.</p>
+
+<!--tabs-->
+
+<h4 id="-incorrect">❌ Incorrect</h4>
+
+<div class="language-ts highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">x</span><span class="p">:</span> <span class="nb">Array</span><span class="o">&lt;</span><span class="kr">string</span><span class="o">&gt;</span> <span class="o">=</span> <span class="p">[</span><span class="dl">'</span><span class="s1">a</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">b</span><span class="dl">'</span><span class="p">];</span>
+<span class="kd">const</span> <span class="nx">y</span><span class="p">:</span> <span class="nx">ReadonlyArray</span><span class="o">&lt;</span><span class="kr">string</span><span class="o">&gt;</span> <span class="o">=</span> <span class="p">[</span><span class="dl">'</span><span class="s1">a</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">b</span><span class="dl">'</span><span class="p">];</span>
+</code></pre></div></div>
+
+<h4 id="-correct">✅ Correct</h4>
+
+<div class="language-ts highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">x</span><span class="p">:</span> <span class="kr">string</span><span class="p">[]</span> <span class="o">=</span> <span class="p">[</span><span class="dl">'</span><span class="s1">a</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">b</span><span class="dl">'</span><span class="p">];</span>
+<span class="kd">const</span> <span class="nx">y</span><span class="p">:</span> <span class="k">readonly</span> <span class="kr">string</span><span class="p">[]</span> <span class="o">=</span> <span class="p">[</span><span class="dl">'</span><span class="s1">a</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">b</span><span class="dl">'</span><span class="p">];</span>
+</code></pre></div></div>
+
+<h3 id="generic"><code class="language-plaintext highlighter-rouge">"generic"</code></h3>
+
+<p>Always use <code class="language-plaintext highlighter-rouge">Array&lt;T&gt;</code> or <code class="language-plaintext highlighter-rouge">ReadonlyArray&lt;T&gt;</code> for all array types.</p>
+
+<!--tabs-->
+
+<h4 id="-incorrect-1">❌ Incorrect</h4>
+
+<div class="language-ts highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">x</span><span class="p">:</span> <span class="kr">string</span><span class="p">[]</span> <span class="o">=</span> <span class="p">[</span><span class="dl">'</span><span class="s1">a</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">b</span><span class="dl">'</span><span class="p">];</span>
+<span class="kd">const</span> <span class="nx">y</span><span class="p">:</span> <span class="k">readonly</span> <span class="kr">string</span><span class="p">[]</span> <span class="o">=</span> <span class="p">[</span><span class="dl">'</span><span class="s1">a</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">b</span><span class="dl">'</span><span class="p">];</span>
+</code></pre></div></div>
+
+<h4 id="-correct-1">✅ Correct</h4>
+
+<div class="language-ts highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">x</span><span class="p">:</span> <span class="nb">Array</span><span class="o">&lt;</span><span class="kr">string</span><span class="o">&gt;</span> <span class="o">=</span> <span class="p">[</span><span class="dl">'</span><span class="s1">a</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">b</span><span class="dl">'</span><span class="p">];</span>
+<span class="kd">const</span> <span class="nx">y</span><span class="p">:</span> <span class="nx">ReadonlyArray</span><span class="o">&lt;</span><span class="kr">string</span><span class="o">&gt;</span> <span class="o">=</span> <span class="p">[</span><span class="dl">'</span><span class="s1">a</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">b</span><span class="dl">'</span><span class="p">];</span>
+</code></pre></div></div>
+
+<h3 id="array-simple"><code class="language-plaintext highlighter-rouge">"array-simple"</code></h3>
+
+<p>Use <code class="language-plaintext highlighter-rouge">T[]</code> or <code class="language-plaintext highlighter-rouge">readonly T[]</code> for simple types (i.e. types which are just primitive names or type references).
+Use <code class="language-plaintext highlighter-rouge">Array&lt;T&gt;</code> or <code class="language-plaintext highlighter-rouge">ReadonlyArray&lt;T&gt;</code> for all other types (union types, intersection types, object types, function types, etc).</p>
+
+<!--tabs-->
+
+<h4 id="-incorrect-2">❌ Incorrect</h4>
+
+<div class="language-ts highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">a</span><span class="p">:</span> <span class="p">(</span><span class="kr">string</span> <span class="o">|</span> <span class="kr">number</span><span class="p">)[]</span> <span class="o">=</span> <span class="p">[</span><span class="dl">'</span><span class="s1">a</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">b</span><span class="dl">'</span><span class="p">];</span>
+<span class="kd">const</span> <span class="nx">b</span><span class="p">:</span> <span class="p">{</span> <span class="nl">prop</span><span class="p">:</span> <span class="kr">string</span> <span class="p">}[]</span> <span class="o">=</span> <span class="p">[{</span> <span class="na">prop</span><span class="p">:</span> <span class="dl">'</span><span class="s1">a</span><span class="dl">'</span> <span class="p">}];</span>
+<span class="kd">const</span> <span class="nx">c</span><span class="p">:</span> <span class="p">(()</span> <span class="o">=&gt;</span> <span class="k">void</span><span class="p">)[]</span> <span class="o">=</span> <span class="p">[()</span> <span class="o">=&gt;</span> <span class="p">{}];</span>
+<span class="kd">const</span> <span class="nx">d</span><span class="p">:</span> <span class="nb">Array</span><span class="o">&lt;</span><span class="nx">MyType</span><span class="o">&gt;</span> <span class="o">=</span> <span class="p">[</span><span class="dl">'</span><span class="s1">a</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">b</span><span class="dl">'</span><span class="p">];</span>
+<span class="kd">const</span> <span class="nx">e</span><span class="p">:</span> <span class="nb">Array</span><span class="o">&lt;</span><span class="kr">string</span><span class="o">&gt;</span> <span class="o">=</span> <span class="p">[</span><span class="dl">'</span><span class="s1">a</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">b</span><span class="dl">'</span><span class="p">];</span>
+<span class="kd">const</span> <span class="nx">f</span><span class="p">:</span> <span class="nx">ReadonlyArray</span><span class="o">&lt;</span><span class="kr">string</span><span class="o">&gt;</span> <span class="o">=</span> <span class="p">[</span><span class="dl">'</span><span class="s1">a</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">b</span><span class="dl">'</span><span class="p">];</span>
+</code></pre></div></div>
+
+<h4 id="-correct-2">✅ Correct</h4>
+
+<div class="language-ts highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">a</span><span class="p">:</span> <span class="nb">Array</span><span class="o">&lt;</span><span class="kr">string</span> <span class="o">|</span> <span class="kr">number</span><span class="o">&gt;</span> <span class="o">=</span> <span class="p">[</span><span class="dl">'</span><span class="s1">a</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">b</span><span class="dl">'</span><span class="p">];</span>
+<span class="kd">const</span> <span class="nx">b</span><span class="p">:</span> <span class="nb">Array</span><span class="o">&lt;</span><span class="p">{</span> <span class="na">prop</span><span class="p">:</span> <span class="kr">string</span> <span class="p">}</span><span class="o">&gt;</span> <span class="o">=</span> <span class="p">[{</span> <span class="na">prop</span><span class="p">:</span> <span class="dl">'</span><span class="s1">a</span><span class="dl">'</span> <span class="p">}];</span>
+<span class="kd">const</span> <span class="nx">c</span><span class="p">:</span> <span class="nb">Array</span><span class="o">&lt;</span><span class="p">()</span> <span class="o">=&gt;</span> <span class="k">void</span><span class="o">&gt;</span> <span class="o">=</span> <span class="p">[()</span> <span class="o">=&gt;</span> <span class="p">{}];</span>
+<span class="kd">const</span> <span class="nx">d</span><span class="p">:</span> <span class="nx">MyType</span><span class="p">[]</span> <span class="o">=</span> <span class="p">[</span><span class="dl">'</span><span class="s1">a</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">b</span><span class="dl">'</span><span class="p">];</span>
+<span class="kd">const</span> <span class="nx">e</span><span class="p">:</span> <span class="kr">string</span><span class="p">[]</span> <span class="o">=</span> <span class="p">[</span><span class="dl">'</span><span class="s1">a</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">b</span><span class="dl">'</span><span class="p">];</span>
+<span class="kd">const</span> <span class="nx">f</span><span class="p">:</span> <span class="k">readonly</span> <span class="kr">string</span><span class="p">[]</span> <span class="o">=</span> <span class="p">[</span><span class="dl">'</span><span class="s1">a</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">b</span><span class="dl">'</span><span class="p">];</span>
+</code></pre></div></div>
+
+<h2 id="combination-matrix">Combination Matrix</h2>
+
+<p>This matrix lists all possible option combinations and their expected results for different types of Arrays.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>defaultOption</th>
+      <th>readonlyOption</th>
+      <th>Array with simple type</th>
+      <th>Array with non simple type</th>
+      <th>Readonly array with simple type</th>
+      <th>Readonly array with non simple type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">array</code></td>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">number[]</code></td>
+      <td><code class="language-plaintext highlighter-rouge">(Foo &amp; Bar)[]</code></td>
+      <td><code class="language-plaintext highlighter-rouge">readonly number[]</code></td>
+      <td><code class="language-plaintext highlighter-rouge">readonly (Foo &amp; Bar)[]</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">array</code></td>
+      <td><code class="language-plaintext highlighter-rouge">array</code></td>
+      <td><code class="language-plaintext highlighter-rouge">number[]</code></td>
+      <td><code class="language-plaintext highlighter-rouge">(Foo &amp; Bar)[]</code></td>
+      <td><code class="language-plaintext highlighter-rouge">readonly number[]</code></td>
+      <td><code class="language-plaintext highlighter-rouge">readonly (Foo &amp; Bar)[]</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">array</code></td>
+      <td><code class="language-plaintext highlighter-rouge">array-simple</code></td>
+      <td><code class="language-plaintext highlighter-rouge">number[]</code></td>
+      <td><code class="language-plaintext highlighter-rouge">(Foo &amp; Bar)[]</code></td>
+      <td><code class="language-plaintext highlighter-rouge">readonly number[]</code></td>
+      <td><code class="language-plaintext highlighter-rouge">ReadonlyArray&lt;Foo &amp; Bar&gt;</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">array</code></td>
+      <td><code class="language-plaintext highlighter-rouge">generic</code></td>
+      <td><code class="language-plaintext highlighter-rouge">number[]</code></td>
+      <td><code class="language-plaintext highlighter-rouge">(Foo &amp; Bar)[]</code></td>
+      <td><code class="language-plaintext highlighter-rouge">ReadonlyArray&lt;number&gt;</code></td>
+      <td><code class="language-plaintext highlighter-rouge">ReadonlyArray&lt;Foo &amp; Bar&gt;</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">array-simple</code></td>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">number[]</code></td>
+      <td><code class="language-plaintext highlighter-rouge">Array&lt;Foo &amp; Bar&gt;</code></td>
+      <td><code class="language-plaintext highlighter-rouge">readonly number[]</code></td>
+      <td><code class="language-plaintext highlighter-rouge">ReadonlyArray&lt;Foo &amp; Bar&gt;</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">array-simple</code></td>
+      <td><code class="language-plaintext highlighter-rouge">array</code></td>
+      <td><code class="language-plaintext highlighter-rouge">number[]</code></td>
+      <td><code class="language-plaintext highlighter-rouge">Array&lt;Foo &amp; Bar&gt;</code></td>
+      <td><code class="language-plaintext highlighter-rouge">readonly number[]</code></td>
+      <td><code class="language-plaintext highlighter-rouge">readonly (Foo &amp; Bar)[]</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">array-simple</code></td>
+      <td><code class="language-plaintext highlighter-rouge">array-simple</code></td>
+      <td><code class="language-plaintext highlighter-rouge">number[]</code></td>
+      <td><code class="language-plaintext highlighter-rouge">Array&lt;Foo &amp; Bar&gt;</code></td>
+      <td><code class="language-plaintext highlighter-rouge">readonly number[]</code></td>
+      <td><code class="language-plaintext highlighter-rouge">ReadonlyArray&lt;Foo &amp; Bar&gt;</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">array-simple</code></td>
+      <td><code class="language-plaintext highlighter-rouge">generic</code></td>
+      <td><code class="language-plaintext highlighter-rouge">number[]</code></td>
+      <td><code class="language-plaintext highlighter-rouge">Array&lt;Foo &amp; Bar&gt;</code></td>
+      <td><code class="language-plaintext highlighter-rouge">ReadonlyArray&lt;number&gt;</code></td>
+      <td><code class="language-plaintext highlighter-rouge">ReadonlyArray&lt;Foo &amp; Bar&gt;</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">generic</code></td>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">Array&lt;number&gt;</code></td>
+      <td><code class="language-plaintext highlighter-rouge">Array&lt;Foo &amp; Bar&gt;</code></td>
+      <td><code class="language-plaintext highlighter-rouge">ReadonlyArray&lt;number&gt;</code></td>
+      <td><code class="language-plaintext highlighter-rouge">ReadonlyArray&lt;Foo &amp; Bar&gt;</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">generic</code></td>
+      <td><code class="language-plaintext highlighter-rouge">array</code></td>
+      <td><code class="language-plaintext highlighter-rouge">Array&lt;number&gt;</code></td>
+      <td><code class="language-plaintext highlighter-rouge">Array&lt;Foo &amp; Bar&gt;</code></td>
+      <td><code class="language-plaintext highlighter-rouge">readonly number[]</code></td>
+      <td><code class="language-plaintext highlighter-rouge">readonly (Foo &amp; Bar)[]</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">generic</code></td>
+      <td><code class="language-plaintext highlighter-rouge">array-simple</code></td>
+      <td><code class="language-plaintext highlighter-rouge">Array&lt;number&gt;</code></td>
+      <td><code class="language-plaintext highlighter-rouge">Array&lt;Foo &amp; Bar&gt;</code></td>
+      <td><code class="language-plaintext highlighter-rouge">readonly number[]</code></td>
+      <td><code class="language-plaintext highlighter-rouge">ReadonlyArray&lt;Foo &amp; Bar&gt;</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">generic</code></td>
+      <td><code class="language-plaintext highlighter-rouge">generic</code></td>
+      <td><code class="language-plaintext highlighter-rouge">Array&lt;number&gt;</code></td>
+      <td><code class="language-plaintext highlighter-rouge">Array&lt;Foo &amp; Bar&gt;</code></td>
+      <td><code class="language-plaintext highlighter-rouge">ReadonlyArray&lt;number&gt;</code></td>
+      <td><code class="language-plaintext highlighter-rouge">ReadonlyArray&lt;Foo &amp; Bar&gt;</code></td>
+    </tr>
+  </tbody>
+</table>
+:ET

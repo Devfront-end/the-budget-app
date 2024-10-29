@@ -1,0 +1,11 @@
+I"�<blockquote>
+  <p>🛑 This file is source code, not the primary documentation location! 🛑</p>
+
+  <p>See <strong>https://typescript-eslint.io/rules/comma-spacing</strong> for documentation.</p>
+</blockquote>
+
+<h2 id="examples">Examples</h2>
+
+<p>This rule extends the base <a href="https://eslint.org/docs/rules/comma-spacing"><code class="language-plaintext highlighter-rouge">eslint/comma-spacing</code></a> rule.
+It adds support for trailing comma in a types parameters list.</p>
+:ET

@@ -1,0 +1,11 @@
+I"<blockquote>
+  <p>🛑 This file is source code, not the primary documentation location! 🛑</p>
+
+  <p>See <strong>https://typescript-eslint.io/rules/block-spacing</strong> for documentation.</p>
+</blockquote>
+
+<h2 id="examples">Examples</h2>
+
+<p>This rule extends the base <a href="https://eslint.org/docs/rules/block-spacing"><code class="language-plaintext highlighter-rouge">eslint/block-spacing</code></a> rule.
+This version adds support for TypeScript related blocks (interfaces, object type literals and enums).</p>
+:ET

@@ -1,0 +1,11 @@
+I"�<blockquote>
+  <p>🛑 This file is source code, not the primary documentation location! 🛑</p>
+
+  <p>See <strong>https://typescript-eslint.io/rules/brace-style</strong> for documentation.</p>
+</blockquote>
+
+<h2 id="examples">Examples</h2>
+
+<p>This rule extends the base <a href="https://eslint.org/docs/rules/brace-style"><code class="language-plaintext highlighter-rouge">eslint/brace-style</code></a> rule.
+It adds support for <code class="language-plaintext highlighter-rouge">enum</code>, <code class="language-plaintext highlighter-rouge">interface</code>, <code class="language-plaintext highlighter-rouge">namespace</code> and <code class="language-plaintext highlighter-rouge">module</code> declarations.</p>
+:ET

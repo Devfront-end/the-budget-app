@@ -1,0 +1,90 @@
+I"K+<blockquote>
+  <p>🛑 This file is source code, not the primary documentation location! 🛑</p>
+
+  <p>See <strong>https://typescript-eslint.io/rules/adjacent-overload-signatures</strong> for documentation.</p>
+</blockquote>
+
+<p>Function overload signatures represent multiple ways a function can be called, potentially with different return types.
+It’s typical for an interface or type alias describing a function to place all overload signatures next to each other.
+If Signatures placed elsewhere in the type are easier to be missed by future developers reading the code.</p>
+
+<h2 id="examples">Examples</h2>
+
+<!--tabs-->
+
+<h3 id="-incorrect">❌ Incorrect</h3>
+
+<div class="language-ts highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">declare</span> <span class="k">namespace</span> <span class="nx">Foo</span> <span class="p">{</span>
+  <span class="k">export</span> <span class="kd">function</span> <span class="nx">foo</span><span class="p">(</span><span class="nx">s</span><span class="p">:</span> <span class="kr">string</span><span class="p">):</span> <span class="k">void</span><span class="p">;</span>
+  <span class="k">export</span> <span class="kd">function</span> <span class="nx">foo</span><span class="p">(</span><span class="nx">n</span><span class="p">:</span> <span class="kr">number</span><span class="p">):</span> <span class="k">void</span><span class="p">;</span>
+  <span class="k">export</span> <span class="kd">function</span> <span class="nx">bar</span><span class="p">():</span> <span class="k">void</span><span class="p">;</span>
+  <span class="k">export</span> <span class="kd">function</span> <span class="nx">foo</span><span class="p">(</span><span class="nx">sn</span><span class="p">:</span> <span class="kr">string</span> <span class="o">|</span> <span class="kr">number</span><span class="p">):</span> <span class="k">void</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">type</span> <span class="nx">Foo</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">foo</span><span class="p">(</span><span class="na">s</span><span class="p">:</span> <span class="kr">string</span><span class="p">):</span> <span class="k">void</span><span class="p">;</span>
+  <span class="nx">foo</span><span class="p">(</span><span class="na">n</span><span class="p">:</span> <span class="kr">number</span><span class="p">):</span> <span class="k">void</span><span class="p">;</span>
+  <span class="nx">bar</span><span class="p">():</span> <span class="k">void</span><span class="p">;</span>
+  <span class="nx">foo</span><span class="p">(</span><span class="na">sn</span><span class="p">:</span> <span class="kr">string</span> <span class="o">|</span> <span class="kr">number</span><span class="p">):</span> <span class="k">void</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="kr">interface</span> <span class="nx">Foo</span> <span class="p">{</span>
+  <span class="nx">foo</span><span class="p">(</span><span class="nx">s</span><span class="p">:</span> <span class="kr">string</span><span class="p">):</span> <span class="k">void</span><span class="p">;</span>
+  <span class="nx">foo</span><span class="p">(</span><span class="nx">n</span><span class="p">:</span> <span class="kr">number</span><span class="p">):</span> <span class="k">void</span><span class="p">;</span>
+  <span class="nx">bar</span><span class="p">():</span> <span class="k">void</span><span class="p">;</span>
+  <span class="nx">foo</span><span class="p">(</span><span class="nx">sn</span><span class="p">:</span> <span class="kr">string</span> <span class="o">|</span> <span class="kr">number</span><span class="p">):</span> <span class="k">void</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">class</span> <span class="nx">Foo</span> <span class="p">{</span>
+  <span class="nx">foo</span><span class="p">(</span><span class="nx">s</span><span class="p">:</span> <span class="kr">string</span><span class="p">):</span> <span class="k">void</span><span class="p">;</span>
+  <span class="nx">foo</span><span class="p">(</span><span class="nx">n</span><span class="p">:</span> <span class="kr">number</span><span class="p">):</span> <span class="k">void</span><span class="p">;</span>
+  <span class="nx">bar</span><span class="p">():</span> <span class="k">void</span> <span class="p">{}</span>
+  <span class="nx">foo</span><span class="p">(</span><span class="nx">sn</span><span class="p">:</span> <span class="kr">string</span> <span class="o">|</span> <span class="kr">number</span><span class="p">):</span> <span class="k">void</span> <span class="p">{}</span>
+<span class="p">}</span>
+
+<span class="k">export</span> <span class="kd">function</span> <span class="nx">foo</span><span class="p">(</span><span class="nx">s</span><span class="p">:</span> <span class="kr">string</span><span class="p">):</span> <span class="k">void</span><span class="p">;</span>
+<span class="k">export</span> <span class="kd">function</span> <span class="nx">foo</span><span class="p">(</span><span class="nx">n</span><span class="p">:</span> <span class="kr">number</span><span class="p">):</span> <span class="k">void</span><span class="p">;</span>
+<span class="k">export</span> <span class="kd">function</span> <span class="nx">bar</span><span class="p">():</span> <span class="k">void</span><span class="p">;</span>
+<span class="k">export</span> <span class="kd">function</span> <span class="nx">foo</span><span class="p">(</span><span class="nx">sn</span><span class="p">:</span> <span class="kr">string</span> <span class="o">|</span> <span class="kr">number</span><span class="p">):</span> <span class="k">void</span><span class="p">;</span>
+</code></pre></div></div>
+
+<h3 id="-correct">✅ Correct</h3>
+
+<div class="language-ts highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">declare</span> <span class="k">namespace</span> <span class="nx">Foo</span> <span class="p">{</span>
+  <span class="k">export</span> <span class="kd">function</span> <span class="nx">foo</span><span class="p">(</span><span class="nx">s</span><span class="p">:</span> <span class="kr">string</span><span class="p">):</span> <span class="k">void</span><span class="p">;</span>
+  <span class="k">export</span> <span class="kd">function</span> <span class="nx">foo</span><span class="p">(</span><span class="nx">n</span><span class="p">:</span> <span class="kr">number</span><span class="p">):</span> <span class="k">void</span><span class="p">;</span>
+  <span class="k">export</span> <span class="kd">function</span> <span class="nx">foo</span><span class="p">(</span><span class="nx">sn</span><span class="p">:</span> <span class="kr">string</span> <span class="o">|</span> <span class="kr">number</span><span class="p">):</span> <span class="k">void</span><span class="p">;</span>
+  <span class="k">export</span> <span class="kd">function</span> <span class="nx">bar</span><span class="p">():</span> <span class="k">void</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">type</span> <span class="nx">Foo</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">foo</span><span class="p">(</span><span class="na">s</span><span class="p">:</span> <span class="kr">string</span><span class="p">):</span> <span class="k">void</span><span class="p">;</span>
+  <span class="nx">foo</span><span class="p">(</span><span class="na">n</span><span class="p">:</span> <span class="kr">number</span><span class="p">):</span> <span class="k">void</span><span class="p">;</span>
+  <span class="nx">foo</span><span class="p">(</span><span class="na">sn</span><span class="p">:</span> <span class="kr">string</span> <span class="o">|</span> <span class="kr">number</span><span class="p">):</span> <span class="k">void</span><span class="p">;</span>
+  <span class="nx">bar</span><span class="p">():</span> <span class="k">void</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="kr">interface</span> <span class="nx">Foo</span> <span class="p">{</span>
+  <span class="nx">foo</span><span class="p">(</span><span class="nx">s</span><span class="p">:</span> <span class="kr">string</span><span class="p">):</span> <span class="k">void</span><span class="p">;</span>
+  <span class="nx">foo</span><span class="p">(</span><span class="nx">n</span><span class="p">:</span> <span class="kr">number</span><span class="p">):</span> <span class="k">void</span><span class="p">;</span>
+  <span class="nx">foo</span><span class="p">(</span><span class="nx">sn</span><span class="p">:</span> <span class="kr">string</span> <span class="o">|</span> <span class="kr">number</span><span class="p">):</span> <span class="k">void</span><span class="p">;</span>
+  <span class="nx">bar</span><span class="p">():</span> <span class="k">void</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">class</span> <span class="nx">Foo</span> <span class="p">{</span>
+  <span class="nx">foo</span><span class="p">(</span><span class="nx">s</span><span class="p">:</span> <span class="kr">string</span><span class="p">):</span> <span class="k">void</span><span class="p">;</span>
+  <span class="nx">foo</span><span class="p">(</span><span class="nx">n</span><span class="p">:</span> <span class="kr">number</span><span class="p">):</span> <span class="k">void</span><span class="p">;</span>
+  <span class="nx">foo</span><span class="p">(</span><span class="nx">sn</span><span class="p">:</span> <span class="kr">string</span> <span class="o">|</span> <span class="kr">number</span><span class="p">):</span> <span class="k">void</span> <span class="p">{}</span>
+  <span class="nx">bar</span><span class="p">():</span> <span class="k">void</span> <span class="p">{}</span>
+<span class="p">}</span>
+
+<span class="k">export</span> <span class="kd">function</span> <span class="nx">bar</span><span class="p">():</span> <span class="k">void</span><span class="p">;</span>
+<span class="k">export</span> <span class="kd">function</span> <span class="nx">foo</span><span class="p">(</span><span class="nx">s</span><span class="p">:</span> <span class="kr">string</span><span class="p">):</span> <span class="k">void</span><span class="p">;</span>
+<span class="k">export</span> <span class="kd">function</span> <span class="nx">foo</span><span class="p">(</span><span class="nx">n</span><span class="p">:</span> <span class="kr">number</span><span class="p">):</span> <span class="k">void</span><span class="p">;</span>
+<span class="k">export</span> <span class="kd">function</span> <span class="nx">foo</span><span class="p">(</span><span class="nx">sn</span><span class="p">:</span> <span class="kr">string</span> <span class="o">|</span> <span class="kr">number</span><span class="p">):</span> <span class="k">void</span><span class="p">;</span>
+</code></pre></div></div>
+
+<h2 id="when-not-to-use-it">When Not To Use It</h2>
+
+<p>If you don’t care about the general structure of the code, then you will not need this rule.</p>
+:ET
